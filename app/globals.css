@@ -1,26 +1,42 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Professional Color Palette */
+  --color-primary: #0f172a;      /* Slate 900 - Primary dark */
+  --color-secondary: #1e293b;    /* Slate 800 - Secondary dark */
+  --color-accent: #d4af37;       /* Gold - Premium accent */
+  --color-accent-dark: #b8860b;  /* Dark gold */
+  
+  /* Resource Colors - Sophisticated tones */
+  --color-klient: #3b82f6;       /* Blue 500 */
+  --color-tillit: #059669;       /* Emerald 600 */
+  --color-penger: #d4af37;       /* Gold */
+  --color-omdømme: #7c3aed;      /* Violet 600 */
+  
+  /* Text Colors */
+  --color-text-primary: #f1f5f9;    /* Slate 100 */
+  --color-text-secondary: #cbd5e1;  /* Slate 300 */
+  --color-text-muted: #94a3b8;      /* Slate 400 */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .font-display {
+    font-family: var(--font-playfair), Georgia, serif;
+  }
+  
+  .glass-morphism {
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
 }

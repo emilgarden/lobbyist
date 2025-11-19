@@ -1,36 +1,151 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lobbyist - Political Satire Card Game
 
-## Getting Started
+En politisk satire-basert kort-swipe-spill inspirert av Reigns, hvor du navigerer moralske dilemmaer som lobbyist.
 
-First, run the development server:
+🎮 **[Play Now](https://lobbyist.vercel.app)** (Vercel deployment)
+
+## 🎯 Hva er dette?
+
+Et kort-swipe-spill hvor du spiller som lobbyist og må balansere mellom klientenes interesser, politikernes tillit, firmaets økonomi og ditt offentlige omdømme. Hver beslutning har konsekvenser, og din spillestil unlocker spesielle karakterer og events.
+
+## 🎮 Gameplay
+
+- **Swipe kort** venstre/høyre for å ta beslutninger
+- **Balanser 4 ressurser**: Klient 💼, Tillit 🤝, Penger 💰, Omdømme 📰
+- **Overlev** så lenge som mulig uten at ressurser når 0 eller 100
+- **Utforsk** ulike politiske scenarioer
+
+## 🚀 Quick Start
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Åpne [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Next.js 14** (App Router)
+- **TypeScript**
+- **Tailwind CSS**
+- **Framer Motion** (animasjoner)
+- **Zustand** (state management)
 
-## Learn More
+## 📚 Legg til innhold
 
-To learn more about Next.js, take a look at the following resources:
+Se [INFRASTRUCTURE.md](./INFRASTRUCTURE.md) for komplett guide til å:
+- Legge til nye scenarioer
+- Lage nye events
+- Endre temaer
+- Utvide funksjonalitet
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Rask oversikt:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Nytt scenario:**
+1. Lag fil i `/data/scenarios/ditt-scenario.ts`
+2. Importer i `/data/scenarios/index.ts`
+3. Legg til i `allScenarios` array
 
-## Deploy on Vercel
+**Nye events:**
+Rediger eksisterende scenario-fil og legg til i `events` array.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🎨 Features
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### ✅ Implementert
+- ✅ Swipe-mekanikk med Framer Motion
+- ✅ 4 ressurs-meters med sanntidsoppdatering
+- ✅ Modulært scenario-system
+- ✅ Tema-velger (5 farger)
+- ✅ Settings-meny med fullskjerm overlay
+- ✅ Game over-skjerm med statistikk
+- ✅ Responsivt design (mobile-first)
+- ✅ Support for låste/betalte scenarioer
+- ✅ **Archetype System** - Unlock spillestiler basert på valg-mønstre
+- ✅ **Threshold Events** - Spesielle events ved ekstreme ressurser (100)
+- ✅ **Narrative Events** - Storytelling mellom valg
+
+### 🔮 Planlagt (Phase 2+)
+- ⏳ Delayed consequences (effekter flere runder senere)
+- 🔗 Event chains (events som trigger hverandre)
+- 📊 Hidden metrics (skjulte score)
+- 🎯 Conditional events (kun vises under visse forhold)
+- 💾 Save/load system
+- 🎵 Lyd og musikk
+
+## 📁 Prosjektstruktur
+
+```
+├── app/                    # Next.js app router
+├── components/             # React-komponenter
+├── data/
+│   ├── scenarios/         # Event-scenarioer (legg til her!)
+│   └── themes.ts          # Tema-konfigurasjon
+├── store/
+│   └── gameStore.ts       # Zustand state
+├── types/
+│   └── game.ts            # TypeScript types
+└── public/
+    └── placeholders/      # Bilder
+```
+
+## 🎯 Scenarioer
+
+- **Intro: Lobbybransjen** 💼 - Dine første dager som lobbyist
+- **Boligpolitikk** 🏠 - Husleietak vs byggesubsidier
+- **Klimapolitikk** 🌍 - Grønn omstilling vs økonomisk realisme (🔒 låst)
+
+## 🎨 Temaer
+
+- Blå (Standard)
+- Rød
+- Grønn
+- Lilla
+- Nøytral
+
+Åpne settings (⚙️) for å bytte tema og scenario.
+
+## 🧪 Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start dev server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+```
+
+## 🚀 Deployment
+
+Prosjektet er deployet via **Vercel**:
+
+1. Push til GitHub
+2. Import repo i Vercel
+3. Auto-deploy ved hver push til main branch
+
+**Live URL:** [lobbyist.vercel.app](https://lobbyist.vercel.app)
+
+### Lokal utvikling
+
+Debug-komponenten vises kun på `localhost`. I produksjon skjules den automatisk.
+
+## 📚 Dokumentasjon
+
+- **[INFRASTRUCTURE.md](./INFRASTRUCTURE.md)** - Guide til å legge til scenarioer og events
+- **[ARCHETYPE_SYSTEM.md](./ARCHETYPE_SYSTEM.md)** - Dokumentasjon av archetype-systemet
+- **[THRESHOLD_SYSTEM.md](./THRESHOLD_SYSTEM.md)** - Dokumentasjon av threshold events
+- **[TESTING_GUIDE.md](./TESTING_GUIDE.md)** - Guide for testing av archetype-systemet
+
+## 📝 Lisens
+
+Dette er et hobby-prosjekt for læring og satire.
+
+---
+
+**Laget med ❤️ og litt for mye kaffe ☕**
