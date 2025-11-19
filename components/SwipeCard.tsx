@@ -41,20 +41,22 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
         bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900
         backdrop-blur-xl
         border ${isNarrative ? 'border-blue-500/30' : 'border-slate-700/50'}
-        rounded-2xl 
+        rounded-xl sm:rounded-2xl 
         shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]
-        p-6 sm:p-8
+        p-4 sm:p-6 md:p-8
         select-none
+        flex flex-col
         ${isNarrative ? '' : 'cursor-grab active:cursor-grabbing'}
       `}
     >
       {/* Portrait */}
       <div className={`
-        w-24 h-24 mx-auto mb-6 
+        w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-3 sm:mb-4 md:mb-6 
         rounded-full overflow-hidden 
         border-2 ${isNarrative ? 'border-blue-400/50' : 'border-slate-600/50'}
         shadow-lg
-        ring-4 ${isNarrative ? 'ring-blue-500/10' : 'ring-slate-700/20'}
+        ring-2 sm:ring-4 ${isNarrative ? 'ring-blue-500/10' : 'ring-slate-700/20'}
+        flex-shrink-0
       `}>
         <img 
           src={event.characterImage} 
@@ -65,30 +67,31 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
 
       {/* Character name */}
       <h2 className="
-        text-xl sm:text-2xl font-display font-bold 
-        text-center mb-5
+        text-lg sm:text-xl md:text-2xl font-display font-bold 
+        text-center mb-2 sm:mb-3 md:mb-4
         text-slate-100
         tracking-wide
+        flex-shrink-0
       ">
         {event.character}
       </h2>
 
-      {/* Event text */}
+      {/* Event text - flex-1 to take available space */}
       <div className={`
-        rounded-xl p-5 sm:p-6 mb-6 min-h-[160px] 
-        flex items-center
+        rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 mb-3 sm:mb-4 md:mb-5
+        flex items-center flex-1 min-h-0 overflow-y-auto
         ${isNarrative 
           ? 'bg-blue-950/40 border border-blue-500/20 backdrop-blur-sm' 
           : 'bg-slate-800/40 border border-slate-600/20 backdrop-blur-sm'
         }
       `}>
-        <p className="text-sm sm:text-base leading-relaxed text-slate-200 text-balance">
+        <p className="text-xs sm:text-sm md:text-base leading-relaxed text-slate-200 text-balance w-full">
           {event.text}
         </p>
       </div>
 
       {/* Choices or Continue Button */}
-      <div className="absolute bottom-6 left-6 right-6">
+      <div className="flex-shrink-0 mt-auto pb-2 sm:pb-4 md:pb-6">
         {isNarrative ? (
           <button
             onClick={onContinue}
@@ -97,7 +100,9 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
               bg-gradient-to-r from-blue-600 to-blue-500
               hover:from-blue-500 hover:to-blue-400
               text-white font-semibold 
-              py-4 rounded-xl 
+              py-3 sm:py-3.5 md:py-4 
+              text-sm sm:text-base
+              rounded-lg sm:rounded-xl 
               transition-all duration-200
               shadow-lg shadow-blue-500/20
               hover:shadow-blue-500/30
@@ -110,19 +115,19 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
           <div className="
             bg-slate-800/60
             border border-slate-600/30
-            rounded-xl p-5
+            rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5
             backdrop-blur-sm
             hover:border-slate-500/50
             transition-all
           ">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
-                <ChevronLeft className="w-5 h-5" />
-                <span className="text-sm font-medium">{event.leftChoice}</span>
+            <div className="flex justify-between items-center gap-2 sm:gap-3">
+              <div className="flex items-center gap-1 sm:gap-2 text-slate-300 hover:text-white transition-colors flex-1 min-w-0">
+                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                <span className="text-xs sm:text-sm font-medium truncate">{event.leftChoice}</span>
               </div>
-              <div className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
-                <span className="text-sm font-medium">{event.rightChoice}</span>
-                <ChevronRight className="w-5 h-5" />
+              <div className="flex items-center gap-1 sm:gap-2 text-slate-300 hover:text-white transition-colors flex-1 min-w-0 justify-end">
+                <span className="text-xs sm:text-sm font-medium truncate">{event.rightChoice}</span>
+                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
               </div>
             </div>
           </div>

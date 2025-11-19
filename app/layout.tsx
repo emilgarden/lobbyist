@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
@@ -19,7 +19,12 @@ export const metadata: Metadata = {
   description: "Navigate moral dilemmas as a lobbyist in this Reigns-style political satire game. Swipe cards, balance resources, and unlock archetypes based on your choices.",
   keywords: ["lobbyist", "political satire", "card game", "reigns", "political game", "norwegian politics"],
   authors: [{ name: "Lobbyist Game" }],
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
   themeColor: "#0f172a",
 };
 

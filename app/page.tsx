@@ -43,15 +43,15 @@ export default function Game() {
   };
 
   return (
-    <main className={`min-h-screen ${themeConfig.gradient} flex flex-col items-center justify-start p-4 transition-colors duration-500`}>
-      {/* Resource Display - Centered at top */}
-      <div className="w-full max-w-screen-lg pt-4 pb-6">
+    <main className={`min-h-screen ${themeConfig.gradient} flex flex-col items-center justify-start p-2 sm:p-4 transition-colors duration-500`}>
+      {/* Resource Display - Compact on mobile */}
+      <div className="w-full max-w-screen-lg pt-2 sm:pt-4 pb-2 sm:pb-4">
         <ResourceDisplay />
       </div>
       
-      {/* Card Area - Centered with proper spacing */}
-      <div className="flex-1 flex items-center justify-center w-full max-w-[400px] mb-20">
-        <div className="relative w-full h-[480px] sm:h-[520px]">
+      {/* Card Area - Optimized for mobile viewport */}
+      <div className="flex-1 flex items-center justify-center w-full max-w-[400px] mb-16 sm:mb-20 min-h-0">
+        <div className="relative w-full h-[380px] sm:h-[480px] md:h-[520px]">
           <SwipeCard
             key={currentEvent.id}
             event={currentEvent}
