@@ -35,28 +35,29 @@ export default function ResourceBar({ name, value, icon, color }: ResourceBarPro
   };
 
   return (
-    <div className="flex flex-col items-center gap-1 sm:gap-1.5 md:gap-2 min-w-[60px] sm:min-w-[70px] md:min-w-[80px]">
-      {/* Icon */}
-      <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-slate-800/60 border border-slate-600/40 flex items-center justify-center">
-        <IconComponent className="w-4 h-4 sm:w-[18px] sm:h-[18px] md:w-5 md:h-5 text-slate-300" />
+    <div className="flex flex-col items-center gap-1 sm:gap-1.5 min-w-[55px] sm:min-w-[65px] md:min-w-[75px]">
+      {/* Icon and Value combined - more compact */}
+      <div className="flex flex-col items-center gap-1">
+        <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full bg-slate-800/60 border border-slate-600/40 flex items-center justify-center">
+          <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4.5 md:h-4.5 text-slate-300" />
+        </div>
+        {/* Value - more prominent */}
+        <div className="text-xs sm:text-sm md:text-base font-mono font-bold text-slate-100">
+          {value}
+        </div>
       </div>
       
       {/* Name */}
-      <div className="text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-wider text-slate-400 leading-tight">
+      <div className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-slate-400 leading-tight text-center">
         {name}
       </div>
       
-      {/* Bar */}
-      <div className="w-full h-1.5 sm:h-2 bg-slate-800/80 rounded-full overflow-hidden border border-slate-700/50">
+      {/* Bar - more prominent */}
+      <div className="w-full h-2 sm:h-2.5 bg-slate-800/80 rounded-full overflow-hidden border border-slate-700/50">
         <div 
           className={`h-full transition-all duration-300 bg-gradient-to-r ${getBarColor()} ${getGlowColor()} shadow-lg`}
           style={{ width: `${value}%` }}
         />
-      </div>
-      
-      {/* Value */}
-      <div className="text-[10px] sm:text-xs md:text-sm font-mono font-semibold text-slate-200">
-        {value}
       </div>
     </div>
   );

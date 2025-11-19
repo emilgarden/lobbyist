@@ -1,9 +1,8 @@
 'use client';
 
-import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Event } from '@/types/game';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useEffect } from 'react';
+import { useState } from 'react';
 
 interface SwipeCardProps {
   event: Event;
@@ -13,20 +12,8 @@ interface SwipeCardProps {
 }
 
 export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue }: SwipeCardProps) {
-  const x = useMotionValue(0);
-  
-  // Smooth spring animation for natural feel
-  const springConfig = { damping: 20, stiffness: 300 };
-  const xSpring = useSpring(x, springConfig);
-  
-  // More responsive rotation - starts earlier, maxes out sooner
-  const rotate = useTransform(xSpring, [-150, 0, 150], [-20, 0, 20]);
-  
-  // Opacity fades out more gradually
-  const opacity = useTransform(xSpring, [-200, -80, 0, 80, 200], [0, 0.7, 1, 0.7, 0]);
-  
-  // Scale down slightly when dragging
-  const scale = useTransform(xSpring, [-200, 0, 200], [0.95, 1, 0.95]);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [exitDirection, setExitDirection] = useState<'left' | 'right' | null>(null);
 
   const isNarrative = event.type === 'narrative';
 
@@ -42,44 +29,50 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
     }
   };
 
-  function handleDragEnd(_event: any, info: any) {
-    if (isNarrative) return;
+  const handleChoice = (direction: 'left' | 'right') => {
+    if (isAnimating) return;
     
-    // Lower threshold for mobile (more responsive)
-    // Also consider velocity for natural swipe feel
-    const threshold = 60; // Reduced from 100 for better mobile responsiveness
-    const velocityThreshold = 500; // Fast swipe triggers even with less distance
+    setIsAnimating(true);
+    setExitDirection(direction);
+    triggerHaptic('medium');
     
-    const shouldSwipeRight = info.offset.x > threshold || info.velocity.x > velocityThreshold;
-    const shouldSwipeLeft = info.offset.x < -threshold || info.velocity.x < -velocityThreshold;
-    
-    if (shouldSwipeRight) {
-      triggerHaptic('medium');
-      onSwipeRight();
-    } else if (shouldSwipeLeft) {
-      triggerHaptic('medium');
-      onSwipeLeft();
-    } else {
-      // Snap back if not enough swipe
-      x.set(0);
-    }
-  }
+    // Trigger callback after animation completes
+    setTimeout(() => {
+      if (direction === 'left') {
+        onSwipeLeft();
+      } else {
+        onSwipeRight();
+      }
+    }, 300);
+  };
 
-  // Reset position when event changes
-  useEffect(() => {
-    x.set(0);
-  }, [event.id, x]);
+  // Exit animation variants
+  const exitVariants: Record<'left' | 'right', { x: number; rotate: number; opacity: number }> = {
+    left: {
+      x: -500,
+      rotate: -30,
+      opacity: 0,
+    },
+    right: {
+      x: 500,
+      rotate: 30,
+      opacity: 0,
+    },
+  };
 
   return (
     <motion.div
-      drag={isNarrative ? false : "x"}
-      dragConstraints={{ left: -200, right: 200 }} // Allow more drag range
-      dragElastic={0.2} // Slight elastic feel at edges
-      dragMomentum={false} // Disable momentum to prevent accidental swipes
-      style={isNarrative ? {} : { x: xSpring, rotate, opacity, scale }}
-      onDragEnd={handleDragEnd}
-      onDragStart={() => {
-        if (!isNarrative) triggerHaptic('light');
+      initial={{ opacity: 0, scale: 0.9, y: 20 }}
+      animate={exitDirection ? exitVariants[exitDirection] : { 
+        opacity: 1, 
+        scale: 1, 
+        y: 0,
+        rotate: 0,
+        x: 0,
+      }}
+      transition={{
+        duration: 0.3,
+        ease: exitDirection ? 'easeInOut' : 'easeOut',
       }}
       className={`
         absolute w-full h-full 
@@ -91,152 +84,154 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
         p-4 sm:p-6 md:p-8
         select-none
         flex flex-col
-        touch-none
-        ${isNarrative ? '' : 'cursor-grab active:cursor-grabbing'}
       `}
     >
-      {/* Portrait */}
-      <div className={`
-        w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-3 sm:mb-4 md:mb-6 
-        rounded-full overflow-hidden 
-        border-2 ${isNarrative ? 'border-blue-400/50' : 'border-slate-600/50'}
-        shadow-lg
-        ring-2 sm:ring-4 ${isNarrative ? 'ring-blue-500/10' : 'ring-slate-700/20'}
-        flex-shrink-0
-      `}>
-        <img 
-          src={event.characterImage} 
-          alt={event.character} 
-          className="w-full h-full object-cover" 
-        />
+      {/* Header: Character info and act indicator */}
+      <div className="flex-shrink-0 mb-3 sm:mb-4">
+        <div className="flex items-center gap-3 sm:gap-4 mb-2">
+          {/* Portrait - smaller, left-aligned */}
+          <div className={`
+            w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16
+            rounded-lg overflow-hidden 
+            border-2 ${isNarrative ? 'border-blue-400/50' : 'border-slate-600/50'}
+            shadow-md
+            flex-shrink-0
+          `}>
+            <img 
+              src={event.characterImage} 
+              alt={event.character} 
+              className="w-full h-full object-cover" 
+            />
+          </div>
+          
+          {/* Character name and act */}
+          <div className="flex-1 min-w-0">
+            <h2 className="
+              text-base sm:text-lg md:text-xl font-display font-bold 
+              text-slate-100
+              tracking-wide
+              truncate
+            ">
+              {event.character}
+            </h2>
+            {event.act && !isNarrative && (
+              <div className="text-[10px] sm:text-xs text-slate-400 uppercase tracking-wider mt-0.5">
+                Akt {event.act}
+              </div>
+            )}
+            {isNarrative && (
+              <div className="text-[10px] sm:text-xs text-blue-400 uppercase tracking-wider mt-0.5 flex items-center gap-1">
+                <span>📖</span>
+                <span>Fortelling</span>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Character name */}
-      <h2 className="
-        text-lg sm:text-xl md:text-2xl font-display font-bold 
-        text-center mb-2 sm:mb-3 md:mb-4
-        text-slate-100
-        tracking-wide
-        flex-shrink-0
-      ">
-        {event.character}
-      </h2>
-
-      {/* Event text - flex-1 to take available space */}
+      {/* Event text - More prominent, better spacing */}
       <div className={`
-        rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 mb-3 sm:mb-4 md:mb-5
-        flex items-center flex-1 min-h-0 overflow-y-auto
-        ${isNarrative 
-          ? 'bg-blue-950/40 border border-blue-500/20 backdrop-blur-sm' 
-          : 'bg-slate-800/40 border border-slate-600/20 backdrop-blur-sm'
-        }
+        flex-1 min-h-0 overflow-y-auto mb-3 sm:mb-4
+        flex items-start
       `}>
-        <p className="text-xs sm:text-sm md:text-base leading-relaxed text-slate-200 text-balance w-full">
-          {event.text}
-        </p>
+        <div className={`
+          rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6
+          w-full
+          ${isNarrative 
+            ? 'bg-blue-950/50 border border-blue-500/30 backdrop-blur-sm' 
+            : 'bg-slate-800/50 border border-slate-600/30 backdrop-blur-sm'
+          }
+        `}>
+          <p className="text-sm sm:text-base md:text-lg leading-relaxed text-slate-100 text-balance">
+            {event.text}
+          </p>
+        </div>
       </div>
 
       {/* Choices or Continue Button */}
-      <div className="flex-shrink-0 mt-auto pb-2 sm:pb-4 md:pb-6">
+      <div className="flex-shrink-0 mt-auto">
         {isNarrative ? (
           <button
             onClick={onContinue}
+            disabled={isAnimating}
             className="
               w-full 
               bg-gradient-to-r from-blue-600 to-blue-500
               hover:from-blue-500 hover:to-blue-400
+              active:from-blue-400 active:to-blue-300
+              disabled:opacity-50 disabled:cursor-not-allowed
               text-white font-semibold 
-              py-3 sm:py-3.5 md:py-4 
+              py-3.5 sm:py-4 md:py-4.5
               text-sm sm:text-base
               rounded-lg sm:rounded-xl 
               transition-all duration-200
               shadow-lg shadow-blue-500/20
               hover:shadow-blue-500/30
               border border-blue-400/20
+              touch-manipulation
             "
           >
             Fortsett →
           </button>
         ) : (
-          <div className="
-            bg-slate-800/60
-            border border-slate-600/30
-            rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5
-            backdrop-blur-sm
-            hover:border-slate-500/50
-            transition-all
-          ">
-            <div className="flex justify-between items-center gap-2 sm:gap-3">
-              <div className="flex items-center gap-1 sm:gap-2 text-slate-300 hover:text-white transition-colors flex-1 min-w-0">
-                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-                <span className="text-xs sm:text-sm font-medium truncate">{event.leftChoice}</span>
-              </div>
-              <div className="flex items-center gap-1 sm:gap-2 text-slate-300 hover:text-white transition-colors flex-1 min-w-0 justify-end">
-                <span className="text-xs sm:text-sm font-medium truncate">{event.rightChoice}</span>
-                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-              </div>
+          <div className="space-y-2">
+            {/* Choice labels for better context */}
+            <div className="flex gap-2 sm:gap-3">
+              {/* Left Choice Button */}
+              <button
+                onClick={() => handleChoice('left')}
+                disabled={isAnimating}
+                className="
+                  flex-1
+                  bg-gradient-to-br from-red-600/95 to-red-700/95
+                  hover:from-red-500 hover:to-red-600
+                  active:from-red-400 active:to-red-500
+                  disabled:opacity-50 disabled:cursor-not-allowed
+                  text-white font-semibold 
+                  py-3.5 sm:py-4 md:py-4.5
+                  text-xs sm:text-sm
+                  rounded-lg sm:rounded-xl 
+                  transition-all duration-200
+                  shadow-lg shadow-red-500/20
+                  hover:shadow-red-500/30
+                  border border-red-400/30
+                  flex items-center justify-center
+                  touch-manipulation
+                  min-h-[60px] sm:min-h-[70px]
+                "
+              >
+                <span className="text-center px-2 leading-tight">{event.leftChoice}</span>
+              </button>
+              
+              {/* Right Choice Button */}
+              <button
+                onClick={() => handleChoice('right')}
+                disabled={isAnimating}
+                className="
+                  flex-1
+                  bg-gradient-to-br from-green-600/95 to-green-700/95
+                  hover:from-green-500 hover:to-green-600
+                  active:from-green-400 active:to-green-500
+                  disabled:opacity-50 disabled:cursor-not-allowed
+                  text-white font-semibold 
+                  py-3.5 sm:py-4 md:py-4.5
+                  text-xs sm:text-sm
+                  rounded-lg sm:rounded-xl 
+                  transition-all duration-200
+                  shadow-lg shadow-green-500/20
+                  hover:shadow-green-500/30
+                  border border-green-400/30
+                  flex items-center justify-center
+                  touch-manipulation
+                  min-h-[60px] sm:min-h-[70px]
+                "
+              >
+                <span className="text-center px-2 leading-tight">{event.rightChoice}</span>
+              </button>
             </div>
           </div>
         )}
       </div>
-
-      {/* Visual feedback during drag (only for choice cards) */}
-      {!isNarrative && (
-        <>
-          {/* Left swipe indicator - more visible and responsive */}
-          <motion.div
-            style={{ 
-              opacity: useTransform(xSpring, [-80, -40, 0], [1, 0.6, 0]),
-              scale: useTransform(xSpring, [-80, -40, 0], [1.1, 1, 0.8])
-            }}
-            className="absolute top-1/2 left-2 sm:left-4 -translate-y-1/2 pointer-events-none z-10"
-          >
-            <div className="
-              w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full 
-              bg-gradient-to-br from-red-500/30 to-red-600/30
-              border-2 border-red-400/50
-              flex items-center justify-center
-              backdrop-blur-md
-              shadow-lg shadow-red-500/30
-            ">
-              <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-red-300" />
-            </div>
-          </motion.div>
-          
-          {/* Right swipe indicator - more visible and responsive */}
-          <motion.div
-            style={{ 
-              opacity: useTransform(xSpring, [0, 40, 80], [0, 0.6, 1]),
-              scale: useTransform(xSpring, [0, 40, 80], [0.8, 1, 1.1])
-            }}
-            className="absolute top-1/2 right-2 sm:right-4 -translate-y-1/2 pointer-events-none z-10"
-          >
-            <div className="
-              w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full 
-              bg-gradient-to-br from-green-500/30 to-green-600/30
-              border-2 border-green-400/50
-              flex items-center justify-center
-              backdrop-blur-md
-              shadow-lg shadow-green-500/30
-            ">
-              <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-green-300" />
-            </div>
-          </motion.div>
-          
-          {/* Progress indicator bar at bottom - shows swipe progress */}
-          <motion.div
-            className="absolute bottom-0 left-0 right-0 h-0.5 pointer-events-none overflow-hidden bg-slate-700/30"
-          >
-            <motion.div
-              style={{
-                width: useTransform(xSpring, [-200, 0, 200], ['50%', '0%', '50%']),
-                x: useTransform(xSpring, [-200, 0, 200], ['-50%', '0%', '50%']),
-              }}
-              className="absolute inset-y-0 bg-gradient-to-r from-red-500 via-transparent to-green-500 opacity-70"
-            />
-          </motion.div>
-        </>
-      )}
     </motion.div>
   );
 }

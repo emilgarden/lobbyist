@@ -19,16 +19,11 @@ export default function ResourceDisplay() {
       w-full max-w-md
       mx-auto
     ">
-      <div className="flex justify-center gap-2 sm:gap-3 md:gap-4 px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
-        <ResourceBar name="Klient" value={resources.klient} icon="💼" color="blue" />
-        <ResourceBar name="Tillit" value={resources.tillit} icon="🤝" color="green" />
-        <ResourceBar name="Penger" value={resources.penger} icon="💰" color="amber" />
-        <ResourceBar name="Omdømme" value={resources.omdømme} icon="📰" color="purple" />
-      </div>
+      {/* Round counter at top */}
       <div className="
         bg-slate-800/60 
-        px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-3 
-        border-t border-slate-700/50 
+        px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 
+        border-b border-slate-700/50 
         text-center
         flex items-center justify-center gap-2
       ">
@@ -36,6 +31,14 @@ export default function ResourceDisplay() {
         <span className="text-[10px] sm:text-xs font-semibold text-slate-300 uppercase tracking-wider">
           Runde {turn}
         </span>
+      </div>
+      
+      {/* Resource bars */}
+      <div className="flex justify-center gap-2 sm:gap-3 md:gap-4 px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
+        <ResourceBar name="Klient" value={resources.klient} icon="💼" color="blue" />
+        <ResourceBar name="Tillit" value={resources.tillit} icon="🤝" color="green" />
+        <ResourceBar name="Penger" value={resources.penger} icon="💰" color="amber" />
+        <ResourceBar name="Omdømme" value={resources.omdømme} icon="📰" color="purple" />
       </div>
     </div>
   );

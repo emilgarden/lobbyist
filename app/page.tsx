@@ -1,5 +1,6 @@
 'use client';
 
+import { AnimatePresence } from 'framer-motion';
 import { useGameStore } from '@/store/gameStore';
 import SwipeCard from '@/components/SwipeCard';
 import ResourceDisplay from '@/components/ResourceDisplay';
@@ -43,22 +44,24 @@ export default function Game() {
   };
 
   return (
-    <main className={`min-h-screen ${themeConfig.gradient} flex flex-col items-center justify-start p-2 sm:p-4 transition-colors duration-500`}>
-      {/* Resource Display - Compact on mobile */}
-      <div className="w-full max-w-screen-lg pt-2 sm:pt-4 pb-2 sm:pb-4">
+    <main className={`min-h-screen ${themeConfig.gradient} flex flex-col items-center justify-center p-2 sm:p-4 transition-colors duration-500`}>
+      {/* Resource Display - Compact on mobile, at top */}
+      <div className="w-full max-w-screen-lg pt-2 sm:pt-4 pb-3 sm:pb-4">
         <ResourceDisplay />
       </div>
       
-      {/* Card Area - Optimized for mobile viewport */}
-      <div className="flex-1 flex items-center justify-center w-full max-w-[400px] mb-20 sm:mb-24 min-h-0">
+      {/* Card Area - Centered with balanced spacing */}
+      <div className="flex-1 flex items-center justify-center w-full max-w-[400px] mb-20 sm:mb-24 min-h-0 py-2 sm:py-4">
         <div className="relative w-full h-[380px] sm:h-[480px] md:h-[520px]">
-          <SwipeCard
-            key={currentEvent.id}
-            event={currentEvent}
-            onSwipeLeft={() => handleSwipe('left')}
-            onSwipeRight={() => handleSwipe('right')}
-            onContinue={handleContinue}
-          />
+          <AnimatePresence mode="wait" initial={false}>
+            <SwipeCard
+              key={currentEvent.id}
+              event={currentEvent}
+              onSwipeLeft={() => handleSwipe('left')}
+              onSwipeRight={() => handleSwipe('right')}
+              onContinue={handleContinue}
+            />
+          </AnimatePresence>
         </div>
       </div>
       
