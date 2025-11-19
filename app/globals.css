@@ -45,4 +45,20 @@ html {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
   }
+  
+  /* Touch optimization for mobile */
+  * {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  /* Smooth scrolling for better mobile feel */
+  html {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Safe area support for iPhone notch */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
 }

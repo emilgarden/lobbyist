@@ -31,10 +31,10 @@ export default function Game() {
       applyConsequence(consequence, direction, currentEvent);
     }
     
-    // Small delay before showing next card
+    // Shorter delay for snappier feel - spring animation handles the transition
     setTimeout(() => {
       nextEvent();
-    }, 300);
+    }, 200);
   };
 
   const handleContinue = () => {
@@ -50,7 +50,7 @@ export default function Game() {
       </div>
       
       {/* Card Area - Optimized for mobile viewport */}
-      <div className="flex-1 flex items-center justify-center w-full max-w-[400px] mb-16 sm:mb-20 min-h-0">
+      <div className="flex-1 flex items-center justify-center w-full max-w-[400px] mb-20 sm:mb-24 min-h-0">
         <div className="relative w-full h-[380px] sm:h-[480px] md:h-[520px]">
           <SwipeCard
             key={currentEvent.id}
@@ -62,7 +62,7 @@ export default function Game() {
         </div>
       </div>
       
-      {/* Settings Button - Bottom Left */}
+      {/* Settings Button - Bottom Bar */}
       <SettingsButton />
 
       {/* Overlays */}
