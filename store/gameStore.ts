@@ -30,6 +30,17 @@ interface GameStore extends GameState {
   dismissArchetype: () => void;
 }
 
+// Helper to safely get initial events
+const getInitialEvents = (): Event[] => {
+  try {
+    const scenario = getScenarioById(DEFAULT_SCENARIO_ID);
+    return scenario?.events || [];
+  } catch (error) {
+    console.error('Error loading initial scenario:', error);
+    return [];
+  }
+};
+
 export const useGameStore = create<GameStore>((set, get) => ({
   // Initial state
   resources: {
@@ -39,7 +50,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     omdømme: 50,
   },
   currentEventIndex: 0,
-  events: getScenarioById(DEFAULT_SCENARIO_ID)?.events || [],
+  events: getInitialEvents(),
   gameOver: false,
   gameOverReason: undefined,
   turn: 0,
@@ -130,62 +141,108 @@ export const useGameStore = create<GameStore>((set, get) => ({
           const newEvents = [...events];
           newEvents.splice(currentEventIndex + 1, 0, thresholdIntro, thresholdChoice);
           
-          set({ 
+        set({ 
             events: newEvents,
             thresholdEventsTriggered: [...thresholdEventsTriggered, resourceKey]
-          });
+        });
         }
       }
     });
   },
 
   resetGame: () => {
-    const { currentScenarioId } = get();
-    const scenario = getScenarioById(currentScenarioId);
-    
+    try {
+      const { currentScenarioId } = get();
+      const scenario = getScenarioById(currentScenarioId);
+      
+      // Ensure events is always an array
+      const events = Array.isArray(scenario?.events) && scenario.events.length > 0 
+        ? scenario.events 
+        : getInitialEvents();
+      
+      set({
+        resources: { klient: 50, tillit: 50, penger: 50, omdømme: 50 },
+        currentEventIndex: 0,
+        events,
+        gameOver: false,
+        gameOverReason: undefined,
+        turn: 0,
+        thresholdEventsTriggered: [],
+        choiceHistory: [],
+        unlockedArchetypes: [],
+        pendingArchetype: undefined,
+      });
+    } catch (error) {
+      console.error('Error resetting game:', error);
+      // Fallback to safe initial state
     set({
-      resources: { klient: 50, tillit: 50, penger: 50, omdømme: 50 },
-      currentEventIndex: 0,
-      events: scenario?.events || [],
-      gameOver: false,
-      gameOverReason: undefined,
-      turn: 0,
-      thresholdEventsTriggered: [],
-      choiceHistory: [],
-      unlockedArchetypes: [],
-      pendingArchetype: undefined,
-    });
+        resources: { klient: 50, tillit: 50, penger: 50, omdømme: 50 },
+        currentEventIndex: 0,
+        events: getInitialEvents(),
+        gameOver: false,
+        gameOverReason: undefined,
+        turn: 0,
+        thresholdEventsTriggered: [],
+        choiceHistory: [],
+        unlockedArchetypes: [],
+        pendingArchetype: undefined,
+      });
+    }
   },
 
   // NEW: Change scenario (resets game)
   changeScenario: (scenarioId: string) => {
-    const scenario = getScenarioById(scenarioId);
-    
-    if (!scenario) {
-      console.error(`Scenario ${scenarioId} not found`);
-      return;
-    }
-    
-    if (scenario.locked) {
-      console.log(`Scenario ${scenarioId} is locked`);
-      // TODO: Show purchase modal in future
-      return;
-    }
-    
-    set({
-      currentScenarioId: scenarioId,
-      events: scenario.events,
+    try {
+      const scenario = getScenarioById(scenarioId);
+      
+      if (!scenario) {
+        console.error(`Scenario ${scenarioId} not found`);
+        return;
+      }
+      
+      if (scenario.locked) {
+        console.log(`Scenario ${scenarioId} is locked`);
+        // TODO: Show purchase modal in future
+        return;
+      }
+      
+      // Ensure events is always an array
+      const events = Array.isArray(scenario.events) && scenario.events.length > 0 
+        ? scenario.events 
+        : getInitialEvents();
+      
+      set({
+        currentScenarioId: scenarioId,
+        events,
+        resources: { klient: 50, tillit: 50, penger: 50, omdømme: 50 },
+        currentEventIndex: 0,
+        gameOver: false,
+        gameOverReason: undefined,
+        turn: 0,
+        settingsOpen: false,
+        thresholdEventsTriggered: [],
+        choiceHistory: [],
+        unlockedArchetypes: [],
+        pendingArchetype: undefined,
+      });
+    } catch (error) {
+      console.error('Error changing scenario:', error);
+      // Fallback to default scenario
+      set({
+        currentScenarioId: DEFAULT_SCENARIO_ID,
+        events: getInitialEvents(),
       resources: { klient: 50, tillit: 50, penger: 50, omdømme: 50 },
       currentEventIndex: 0,
       gameOver: false,
       gameOverReason: undefined,
       turn: 0,
-      settingsOpen: false,
-      thresholdEventsTriggered: [],
-      choiceHistory: [],
-      unlockedArchetypes: [],
-      pendingArchetype: undefined,
-    });
+        thresholdEventsTriggered: [],
+        choiceHistory: [],
+        unlockedArchetypes: [],
+        pendingArchetype: undefined,
+        settingsOpen: false,
+      });
+    }
   },
 
   // NEW: Change theme

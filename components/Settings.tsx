@@ -23,15 +23,15 @@ export default function Settings() {
       <div className="
         bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900
         border border-slate-700/50
-        rounded-2xl p-6 sm:p-8 
-        max-w-2xl w-full max-h-[90vh] 
+        rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 
+        max-w-lg sm:max-w-2xl w-full max-h-[90vh] 
         overflow-y-auto 
         shadow-[0_24px_48px_-12px_rgba(0,0,0,0.5)]
       ">
         {/* Header */}
         <div className="flex items-center justify-between mb-8 border-b border-slate-700/50 pb-5">
           <h2 className="text-2xl sm:text-3xl font-display font-bold text-slate-100">
-            Innstillinger
+            Meny
           </h2>
           <button
             onClick={toggleSettings}

@@ -21,11 +21,23 @@ export default function Game() {
     nextEvent 
   } = useGameStore();
 
-  const currentEvent = events[currentEventIndex];
+  const currentEvent = events?.[currentEventIndex];
   const themeConfig = getThemeConfig(theme);
 
+  // Safety check: if no event or events array is empty, show loading state
+  if (!currentEvent || !events || events.length === 0) {
+    return (
+      <main className={`min-h-screen ${themeConfig.gradient} flex items-center justify-center p-4`}>
+        <div className="text-slate-200 text-center">
+          <p className="text-lg mb-2">Laster spill...</p>
+          <p className="text-sm text-slate-400">Vennligst vent</p>
+        </div>
+      </main>
+    );
+  }
+
   const handleSwipe = (direction: 'left' | 'right') => {
-    if (currentEvent.type === 'narrative') return; // Shouldn't happen, but safety check
+    if (!currentEvent || currentEvent.type === 'narrative') return;
     
     const consequence = currentEvent.consequences?.[direction];
     if (consequence) {
@@ -65,7 +77,7 @@ export default function Game() {
         </div>
       </div>
       
-      {/* Settings Button - Bottom Bar */}
+      {/* Menu Button - Bottom Bar */}
       <SettingsButton />
 
       {/* Overlays */}

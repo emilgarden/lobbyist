@@ -35,29 +35,27 @@ export default function ResourceBar({ name, value, icon, color }: ResourceBarPro
   };
 
   return (
-    <div className="flex flex-col items-center gap-1 sm:gap-1.5 min-w-[55px] sm:min-w-[65px] md:min-w-[75px]">
-      {/* Icon and Value combined - more compact */}
-      <div className="flex flex-col items-center gap-1">
+    <div className="flex flex-col items-center gap-2 sm:gap-2.5 min-w-[55px] sm:min-w-[65px] md:min-w-[75px]">
+      {/* Icon and Name together */}
+      <div className="flex flex-col items-center gap-1 sm:gap-1.5">
         <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full bg-slate-800/60 border border-slate-600/40 flex items-center justify-center">
           <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4.5 md:h-4.5 text-slate-300" />
         </div>
-        {/* Value - more prominent */}
-        <div className="text-xs sm:text-sm md:text-base font-mono font-bold text-slate-100">
-          {value}
+        {/* Name */}
+        <div className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-slate-400 leading-tight text-center">
+          {name}
         </div>
       </div>
       
-      {/* Name */}
-      <div className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-slate-400 leading-tight text-center">
-        {name}
-      </div>
-      
-      {/* Bar - more prominent */}
-      <div className="w-full h-2 sm:h-2.5 bg-slate-800/80 rounded-full overflow-hidden border border-slate-700/50">
-        <div 
-          className={`h-full transition-all duration-300 bg-gradient-to-r ${getBarColor()} ${getGlowColor()} shadow-lg`}
-          style={{ width: `${value}%` }}
-        />
+      {/* Bar only - no numbers, more prominent */}
+      <div className="w-full">
+        {/* Bar - larger and more visible */}
+        <div className="w-full h-3 sm:h-4 md:h-5 bg-slate-800/80 rounded-full overflow-hidden border-2 border-slate-700/50 shadow-inner">
+          <div 
+            className={`h-full transition-all duration-500 ease-out bg-gradient-to-r ${getBarColor()} ${getGlowColor()} shadow-lg`}
+            style={{ width: `${value}%` }}
+          />
+        </div>
       </div>
     </div>
   );

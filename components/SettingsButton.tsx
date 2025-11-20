@@ -24,12 +24,12 @@ export default function SettingsButton() {
         group
         touch-manipulation
       "
-      aria-label="Innstillinger"
+      aria-label="Meny"
     >
       <div className="flex items-center gap-2 sm:gap-3 text-slate-300 group-active:text-slate-100 transition-colors">
         <Settings className="w-5 h-5 sm:w-6 sm:h-6 group-active:rotate-90 transition-transform duration-300" />
         <span className="text-sm sm:text-base font-semibold uppercase tracking-wider">
-          Innstillinger
+          Meny
         </span>
       </div>
     </button>
