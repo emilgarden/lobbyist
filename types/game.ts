@@ -176,6 +176,7 @@ export interface GameState {
   
   // Pending chain event to be processed in nextEvent
   pendingChainEventId?: string;
+  pendingChainConsequence?: Event; // Consequence card for chain event
 }
 
 // ============================================================================
@@ -195,6 +196,7 @@ export interface EventMetadata {
   tags?: string[];               // For filtering/searching
   reflectionPrompt?: string;     // Mid-game introspection text
   choiceTags?: ChoiceTag;        // Tags for left/right choices (archetype system)
+  isChainEvent?: boolean;        // Marked when event is inserted as a chain
 }
 
 export interface DelayedConsequence {

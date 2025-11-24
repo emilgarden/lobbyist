@@ -75,7 +75,7 @@ export default function Game() {
       </div>
       
       {/* Card Area - Fixed distance from resource bar */}
-      <div className="flex items-center justify-center w-full max-w-[400px] mt-8 mb-20 sm:mb-24">
+      <div className="flex items-center justify-center w-full max-w-[400px] mt-4 sm:mt-8 mb-20 sm:mb-24">
         <div className="relative w-full h-[380px] sm:h-[480px] md:h-[520px]">
           <AnimatePresence mode="wait" initial={false}>
             <SwipeCard

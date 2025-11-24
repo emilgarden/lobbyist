@@ -20,8 +20,17 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
   
   const colorScheme = useGameStore((state) => state.colorScheme);
   const schemeConfig = getColorSchemeConfig(colorScheme);
+  const activeResourceChanges = useGameStore((state) => state.activeResourceChanges);
 
   const isNarrative = event.type === 'narrative';
+  const isConsequenceCard = event.character === 'Konsekvens';
+  const hasResourceChanges = Object.keys(activeResourceChanges).some(
+    key => activeResourceChanges[key as keyof typeof activeResourceChanges] !== undefined && 
+           activeResourceChanges[key as keyof typeof activeResourceChanges] !== 0
+  );
+  
+  // Special visual treatment for consequence cards with resource changes
+  const hasSpecialVisuals = isConsequenceCard && hasResourceChanges;
 
   // Haptic feedback helper (for supported devices)
   const triggerHaptic = (type: 'light' | 'medium' | 'heavy' = 'light') => {
@@ -89,12 +98,17 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
         absolute w-full h-full 
         ${schemeConfig.background}
         backdrop-blur-xl
-        border ${isNarrative ? 'border-blue-500/30' : 'border-slate-700/50'}
+        border ${hasSpecialVisuals
+          ? 'border-amber-500/50 shadow-[0_0_20px_rgba(251,191,36,0.3)]'
+          : isNarrative 
+            ? 'border-blue-500/30' 
+            : 'border-slate-700/50'}
         rounded-xl sm:rounded-2xl 
         shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]
         p-4 sm:p-6 md:p-8
         select-none
         flex flex-col
+        ${hasSpecialVisuals ? 'animate-[pulse_2s_ease-in-out_2]' : ''}
       `}
     >
       {/* Header: Character info and act indicator */}
@@ -130,10 +144,16 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
                 Akt {event.act}
               </div>
             )}
-            {isNarrative && (
+            {isNarrative && !isConsequenceCard && (
               <div className="text-[10px] sm:text-xs text-blue-400 uppercase tracking-wider mt-0.5 flex items-center gap-1">
                 <span>📖</span>
                 <span>Fortelling</span>
+              </div>
+            )}
+            {isConsequenceCard && (
+              <div className="text-[10px] sm:text-xs text-amber-400 uppercase tracking-wider mt-0.5 flex items-center gap-1 animate-pulse">
+                <span>⚡</span>
+                <span>Konsekvens</span>
               </div>
             )}
           </div>
@@ -148,9 +168,11 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
         <div className={`
           rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6
           w-full
-          ${isNarrative 
-            ? 'bg-blue-950/50 border border-blue-500/30 backdrop-blur-sm' 
-            : 'bg-slate-800/50 border border-slate-600/30 backdrop-blur-sm'
+          ${hasSpecialVisuals
+            ? 'bg-amber-950/30 border border-amber-500/40 backdrop-blur-sm'
+            : isNarrative 
+              ? 'bg-blue-950/50 border border-blue-500/30 backdrop-blur-sm' 
+              : 'bg-slate-800/50 border border-slate-600/30 backdrop-blur-sm'
           }
         `}>
           <p className="text-sm sm:text-base md:text-lg leading-relaxed text-slate-100 text-balance">

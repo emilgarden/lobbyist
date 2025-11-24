@@ -128,6 +128,40 @@ function findEventById(events: Event[], eventId: string): Event | undefined {
 }
 
 /**
+ * Create a consequence card that explains what happened from a choice
+ * Used for chain events to show the immediate consequence before the chain
+ */
+function createConsequenceCardFromChoice(
+  sourceEvent: Event,
+  choice: 'left' | 'right',
+  resourceChanges: ResourceChange
+): Event {
+  const choiceText = choice === 'left' ? sourceEvent.leftChoice : sourceEvent.rightChoice;
+  
+  // Create a more contextual message
+  const resourceSummary = Object.entries(resourceChanges)
+    .filter(([_, value]) => value !== 0)
+    .map(([key, value]) => {
+      const emoji = {
+        klient: '💼',
+        tillit: '🤝',
+        penger: '💰',
+        omdømme: '📰'
+      }[key];
+      return `${emoji} ${value > 0 ? '+' : ''}${value}`;
+    })
+    .join(', ');
+  
+  return {
+    id: `consequence_chain_${sourceEvent.id}_${choice}`,
+    type: 'narrative',
+    character: 'Konsekvens',
+    characterImage: '/placeholders/portrait-1.png',
+    text: `Ditt valg: "${choiceText}"\n\nDette påvirket: ${resourceSummary}`,
+  };
+}
+
+/**
  * Process delayed consequences that are ready to trigger
  * Modified to process only ONE delayed consequence per nextEvent call
  * This gives players time to read each consequence before the next card
@@ -231,6 +265,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   activeResourceChanges: {},
   isTransitioning: false,
   pendingChainEventId: undefined,
+  pendingChainConsequence: undefined,
 
   // Actions
   applyConsequence: (change, choice, event) => {
@@ -287,9 +322,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       // Handle event chains - don't insert here, just track for nextEvent
       let newPendingChainEventId = state.pendingChainEventId;
+      let newPendingChainConsequence: Event | undefined = undefined;
+      
       if (event.metadata?.chains?.[choice]) {
         const chainEventId = event.metadata.chains[choice];
         console.log(`[applyConsequence] Queueing chain event ${chainEventId} for processing in nextEvent`);
+        
+        // Create a consequence card for THIS choice to show before the chain
+        newPendingChainConsequence = createConsequenceCardFromChoice(
+          event,
+          choice,
+          change // The resource changes from THIS choice
+        );
+        
         newPendingChainEventId = chainEventId;
       }
 
@@ -300,7 +345,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         events: newEvents,
         delayedQueue: newDelayedQueue,
         activeResourceChanges: resourceChanges as any, // Set immediately when choice is made
-        pendingChainEventId: newPendingChainEventId
+        pendingChainEventId: newPendingChainEventId,
+        pendingChainConsequence: newPendingChainConsequence
       };
     });
     
@@ -338,6 +384,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     
     // Step 2: Process pending chain event
     let eventsWithChain = newEvents;
+    let isChainEventInserted = false;
     if (state.pendingChainEventId) {
       const chainEvent = findEventById(newEvents, state.pendingChainEventId);
       if (chainEvent) {
@@ -345,7 +392,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
         // Insert after current event
         const insertIndex = Math.min(state.currentEventIndex + 1, newEvents.length);
         eventsWithChain = [...newEvents];
-        eventsWithChain.splice(insertIndex, 0, chainEvent);
+        // Mark this as a chain event by adding metadata
+        const markedChainEvent = {
+          ...chainEvent,
+          metadata: {
+            ...chainEvent.metadata,
+            isChainEvent: true
+          }
+        };
+        eventsWithChain.splice(insertIndex, 0, markedChainEvent);
+        isChainEventInserted = true;
         console.log(`[nextEvent] Chain event inserted at index ${insertIndex}`);
       } else {
         console.warn(`[nextEvent] Pending chain event ${state.pendingChainEventId} not found in scenario!`);
@@ -359,18 +415,58 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (hasDelayedChanges || hasChainChanges || state.pendingChainEventId) {
       console.log(`[nextEvent] Updating state - delayed: ${hasDelayedChanges}, chain: ${hasChainChanges}, events: ${events.length} -> ${eventsWithChain.length}`);
       
-      // Show resource change animations immediately if any
-      if (Object.keys(resourceChanges).length > 0) {
+      // Check if the new event should have delayed resource updates
+      const nextEventIndex = state.currentEventIndex + 1;
+      const nextEvent = nextEventIndex < eventsWithChain.length ? eventsWithChain[nextEventIndex] : null;
+      const isNextEventConsequence = nextEvent?.character === 'Konsekvens';
+      const isNextEventNarrativeWithChanges = nextEvent?.type === 'narrative' && Object.keys(resourceChanges).length > 0;
+      const isNextEventChain = isChainEventInserted && Object.keys(resourceChanges).length > 0;
+      
+      // Delay resource updates for:
+      // 1. Consequence cards (delayed consequences)
+      // 2. Any narrative event with resource changes
+      // 3. Chain events (so player sees the chain event before resource changes from previous choice)
+      const shouldDelayResourceUpdates = (isNextEventConsequence || isNextEventNarrativeWithChanges || isNextEventChain) && 
+                                          Object.keys(resourceChanges).length > 0;
+      
+      if (shouldDelayResourceUpdates) {
+        const eventType = isNextEventConsequence ? 'Consequence' : isNextEventChain ? 'Chain' : 'Narrative';
+        console.log(`[nextEvent] ${eventType} event with resource changes detected - delaying updates by 1.5s`);
+        
+        // First: Update events but NOT resources yet
+        set({
+          events: eventsWithChain,
+          delayedQueue: remainingQueue,
+          pendingChainEventId: undefined,
+          pendingChainConsequence: undefined
+        });
+        
+        // After 1.5 seconds: Apply resource changes with animation
+        setTimeout(() => {
+          console.log('[nextEvent] Applying delayed consequence resource changes');
+          set({
+            resources: newResources,
+            activeResourceChanges: resourceChanges as any
+          });
+          
+          // Clear resource changes after animation duration (1.2 seconds)
+          setTimeout(() => {
+            set({ activeResourceChanges: {} });
+          }, 1200);
+        }, 1500); // 1.5 second delay for consequence cards
+      }
+      // Regular flow: Show resource change animations immediately if any
+      else if (Object.keys(resourceChanges).length > 0) {
         set({
           events: eventsWithChain,
           resources: newResources,
           delayedQueue: remainingQueue,
           activeResourceChanges: resourceChanges as any,
-          pendingChainEventId: undefined // Clear after processing
+          pendingChainEventId: undefined,
+          pendingChainConsequence: undefined
         });
         
         // Clear resource changes after animation duration (1.2 seconds)
-        // Short duration gives dedicated players a glimpse to make calculated choices on replay
         setTimeout(() => {
           set({ activeResourceChanges: {} });
         }, 1200);
@@ -379,7 +475,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
           events: eventsWithChain,
           resources: newResources,
           delayedQueue: remainingQueue,
-          pendingChainEventId: undefined // Clear after processing
+          pendingChainEventId: undefined,
+          pendingChainConsequence: undefined
         });
       }
     }
