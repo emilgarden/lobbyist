@@ -1,7 +1,5 @@
 import { Scenario } from '@/types/game';
-import { introLobbyistScenario } from './intro-lobbyist';
-import { boligpolitikkScenario } from './boligpolitikk';
-import { klimapolitikkScenario } from './klimapolitikk';
+import { navKap1InsidenScenario } from './nav-kap1-innsiden';
 
 // ============================================================================
 // ALL SCENARIOS
@@ -13,9 +11,7 @@ import { klimapolitikkScenario } from './klimapolitikk';
 // ============================================================================
 
 export const allScenarios: Scenario[] = [
-  introLobbyistScenario,
-  boligpolitikkScenario,
-  klimapolitikkScenario,
+  navKap1InsidenScenario,
 ];
 
 // Helper function to get scenario by ID
@@ -29,5 +25,5 @@ export function getUnlockedScenarios(): Scenario[] {
 }
 
 // Default scenario
-export const DEFAULT_SCENARIO_ID = 'intro-lobbyist';
+export const DEFAULT_SCENARIO_ID = 'nav-kap1-innsiden';
 

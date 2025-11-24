@@ -92,39 +92,9 @@ export function getArchetypeProgress(state: GameState): ArchetypeProgress[] {
  * Returns the archetype if unlocked, null otherwise
  */
 export function checkArchetypeUnlock(state: GameState): Archetype | null {
-  // DEBUG: Log progress
-  if (process.env.NODE_ENV === 'development') {
-    const progress = getArchetypeProgress(state);
-    console.group('🎭 Archetype Progress Check');
-    console.log(`Turn: ${state.turn}`);
-    console.log('Resources:', state.resources);
-    console.log('Choice History:', state.choiceHistory.length, 'choices');
-    
-    progress.forEach(p => {
-      console.group(`📊 ${p.archetypeName} (${p.allMet ? '✅ READY' : '⏳ In Progress'})`);
-      console.log('Min Turn:', p.progress.minTurn.met ? '✅' : '❌', `${p.progress.minTurn.current}/${p.progress.minTurn.required || 'N/A'}`);
-      
-      if (Object.keys(p.progress.resources.details).length > 0) {
-        console.log('Resources:', p.progress.resources.met ? '✅' : '❌');
-        Object.entries(p.progress.resources.details).forEach(([key, detail]) => {
-          const range = detail.min !== undefined && detail.max !== undefined 
-            ? `${detail.min}-${detail.max}`
-            : detail.min !== undefined 
-            ? `≥${detail.min}`
-            : `≤${detail.max}`;
-          console.log(`  ${key}: ${detail.met ? '✅' : '❌'} ${detail.current} (needs ${range})`);
-        });
-      }
-      
-      if (p.progress.choicePattern.details.length > 0) {
-        console.log('Choice Patterns:', p.progress.choicePattern.met ? '✅' : '❌');
-        p.progress.choicePattern.details.forEach(detail => {
-          console.log(`  "${detail.tag}": ${detail.met ? '✅' : '❌'} ${detail.current}/${detail.required}`);
-        });
-      }
-      console.groupEnd();
-    });
-    console.groupEnd();
+  // Only check archetypes if there are any available
+  if (allArchetypes.length === 0) {
+    return null;
   }
   
   for (const archetype of allArchetypes) {

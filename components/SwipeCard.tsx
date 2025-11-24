@@ -3,17 +3,23 @@
 import { motion } from 'framer-motion';
 import { Event } from '@/types/game';
 import { useState } from 'react';
+import { useGameStore } from '@/store/gameStore';
+import { getColorSchemeConfig } from '@/data/colorSchemes';
 
 interface SwipeCardProps {
   event: Event;
   onSwipeLeft: () => void;
   onSwipeRight: () => void;
   onContinue?: () => void;
+  onChoiceMade?: (direction: 'left' | 'right') => void; // Called immediately when choice is made
 }
 
-export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue }: SwipeCardProps) {
+export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue, onChoiceMade }: SwipeCardProps) {
   const [isAnimating, setIsAnimating] = useState(false);
   const [exitDirection, setExitDirection] = useState<'left' | 'right' | null>(null);
+  
+  const colorScheme = useGameStore((state) => state.colorScheme);
+  const schemeConfig = getColorSchemeConfig(colorScheme);
 
   const isNarrative = event.type === 'narrative';
 
@@ -31,6 +37,11 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
 
   const handleChoice = (direction: 'left' | 'right') => {
     if (isAnimating) return;
+    
+    // Call onChoiceMade immediately to trigger resource changes animation
+    if (onChoiceMade) {
+      onChoiceMade(direction);
+    }
     
     setIsAnimating(true);
     setExitDirection(direction);
@@ -76,7 +87,7 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
       }}
       className={`
         absolute w-full h-full 
-        bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900
+        ${schemeConfig.background}
         backdrop-blur-xl
         border ${isNarrative ? 'border-blue-500/30' : 'border-slate-700/50'}
         rounded-xl sm:rounded-2xl 
@@ -183,18 +194,18 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
                 disabled={isAnimating}
                 className="
                   flex-1
-                  bg-gradient-to-br from-red-600/95 to-red-700/95
-                  hover:from-red-500 hover:to-red-600
-                  active:from-red-400 active:to-red-500
+                  bg-gradient-to-br from-slate-700/95 to-slate-800/95
+                  hover:from-slate-600 hover:to-slate-700
+                  active:from-slate-500 active:to-slate-600
                   disabled:opacity-50 disabled:cursor-not-allowed
                   text-white font-semibold 
                   py-3.5 sm:py-4 md:py-4.5
                   text-xs sm:text-sm
                   rounded-lg sm:rounded-xl 
                   transition-all duration-200
-                  shadow-lg shadow-red-500/20
-                  hover:shadow-red-500/30
-                  border border-red-400/30
+                  shadow-lg shadow-slate-700/20
+                  hover:shadow-slate-600/30
+                  border border-slate-600/30
                   flex items-center justify-center
                   touch-manipulation
                   min-h-[60px] sm:min-h-[70px]
@@ -209,18 +220,18 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
                 disabled={isAnimating}
                 className="
                   flex-1
-                  bg-gradient-to-br from-green-600/95 to-green-700/95
-                  hover:from-green-500 hover:to-green-600
-                  active:from-green-400 active:to-green-500
+                  bg-gradient-to-br from-blue-700/95 to-blue-800/95
+                  hover:from-blue-600 hover:to-blue-700
+                  active:from-blue-500 active:to-blue-600
                   disabled:opacity-50 disabled:cursor-not-allowed
                   text-white font-semibold 
                   py-3.5 sm:py-4 md:py-4.5
                   text-xs sm:text-sm
                   rounded-lg sm:rounded-xl 
                   transition-all duration-200
-                  shadow-lg shadow-green-500/20
-                  hover:shadow-green-500/30
-                  border border-green-400/30
+                  shadow-lg shadow-blue-700/20
+                  hover:shadow-blue-600/30
+                  border border-blue-600/30
                   flex items-center justify-center
                   touch-manipulation
                   min-h-[60px] sm:min-h-[70px]

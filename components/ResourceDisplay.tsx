@@ -35,10 +35,10 @@ export default function ResourceDisplay() {
       
       {/* Resource bars */}
       <div className="flex justify-center gap-2 sm:gap-3 md:gap-4 px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
-        <ResourceBar name="Klient" value={resources.klient} icon="💼" color="blue" />
-        <ResourceBar name="Tillit" value={resources.tillit} icon="🤝" color="green" />
-        <ResourceBar name="Penger" value={resources.penger} icon="💰" color="amber" />
-        <ResourceBar name="Omdømme" value={resources.omdømme} icon="📰" color="purple" />
+        <ResourceBar name="Klient" value={resources.klient} icon="💼" color="blue" resourceKey="klient" />
+        <ResourceBar name="Tillit" value={resources.tillit} icon="🤝" color="green" resourceKey="tillit" />
+        <ResourceBar name="Penger" value={resources.penger} icon="💰" color="amber" resourceKey="penger" />
+        <ResourceBar name="Omdømme" value={resources.omdømme} icon="📰" color="purple" resourceKey="omdømme" />
       </div>
     </div>
   );

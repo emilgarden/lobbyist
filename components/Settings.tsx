@@ -2,9 +2,9 @@
 
 import { useGameStore } from '@/store/gameStore';
 import { allScenarios } from '@/data/scenarios';
-import { themes } from '@/data/themes';
-import { Theme } from '@/types/game';
-import { X, Palette, BookOpen, Lock } from 'lucide-react';
+import { colorSchemes } from '@/data/colorSchemes';
+import { ColorScheme } from '@/types/game';
+import { X, Sparkles, BookOpen, Lock } from 'lucide-react';
 
 export default function Settings() {
   const { 
@@ -12,8 +12,8 @@ export default function Settings() {
     toggleSettings, 
     currentScenarioId, 
     changeScenario, 
-    theme, 
-    changeTheme 
+    colorScheme,
+    changeColorScheme
   } = useGameStore();
 
   if (!settingsOpen) return null;
@@ -116,33 +116,53 @@ export default function Settings() {
           </div>
         </div>
 
-        {/* Theme Selection */}
+        {/* WCAG Color Scheme Selection */}
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <Palette className="w-5 h-5 text-slate-400" />
+            <Sparkles className="w-5 h-5 text-slate-400" />
             <h3 className="text-lg sm:text-xl font-semibold text-slate-200">
-              Bakgrunnsfarge
+              Visuell stil (WCAG-kompatibel)
             </h3>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {Object.values(themes).map((themeConfig) => (
-              <button
-                key={themeConfig.id}
-                onClick={() => changeTheme(themeConfig.id)}
-                className={`
-                  p-4 rounded-xl border-2 transition-all
-                  ${theme === themeConfig.id 
-                    ? 'border-blue-500 ring-2 ring-blue-500/30 bg-slate-800/60' 
-                    : 'border-slate-700/50 hover:border-slate-600/70 bg-slate-800/30'
-                  }
-                `}
-              >
-                <div className={`w-full h-16 rounded-lg ${themeConfig.gradient} mb-3 border border-slate-700/30`} />
-                <div className="text-sm font-medium text-center text-slate-200">
-                  {themeConfig.name}
-                </div>
-              </button>
-            ))}
+          <p className="text-sm text-slate-400 mb-4">
+            Velg en visuell stil som passer din preferanse. Alle stiler oppfyller WCAG AA-standarder for tilgjengelighet og inkluderer bakgrunnsfarge.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {Object.values(colorSchemes).map((schemeConfig) => {
+              const isSelected = colorScheme === schemeConfig.id;
+              return (
+                <button
+                  key={schemeConfig.id}
+                  onClick={() => changeColorScheme(schemeConfig.id)}
+                  className={`
+                    relative overflow-hidden rounded-lg transition-all duration-200
+                    ${isSelected 
+                      ? 'border-2 border-blue-500' 
+                      : 'border border-slate-700/50 hover:border-slate-600'
+                    }
+                  `}
+                >
+                  {/* Simple background preview */}
+                  <div className={`w-full h-16 ${schemeConfig.background} flex items-center justify-between px-4`}>
+                    <div className="text-left">
+                      <div className={`text-sm font-medium ${isSelected ? 'text-white' : 'text-slate-200'}`}>
+                        {schemeConfig.name}
+                      </div>
+                      <div className="text-xs text-slate-300/70 mt-0.5">
+                        {schemeConfig.description}
+                      </div>
+                    </div>
+                    {isSelected && (
+                      <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center">
+                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
 

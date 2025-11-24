@@ -20,6 +20,27 @@ export interface ThemeConfig {
   gradient: string;         // Tailwind gradient classes
 }
 
+export type ColorScheme = 'venstre' | 'arbeiderpartiet' | 'hoyre' | 'noytral';
+
+export interface ColorSchemeConfig {
+  id: ColorScheme;
+  name: string;
+  description: string;
+  background: string;  // Solid background color (WCAG compliant)
+  progress: {
+    low: string;        // Solid color for 0-25%
+    medium: string;     // Solid color for 26-50%
+    high: string;       // Solid color for 51-75%
+    veryHigh: string;  // Solid color for 76-100%
+  };
+  glow: {
+    low: string;
+    medium: string;
+    high: string;
+    veryHigh: string;
+  };
+}
+
 // ============================================================================
 // PHASE 1: Core Types (implement now)
 // ============================================================================
@@ -127,6 +148,7 @@ export interface GameState {
   turn: number;                   // Track game progression
   currentScenarioId: string;      // Active scenario
   theme: Theme;                   // Active theme
+  colorScheme: ColorScheme;       // WCAG-compliant color scheme
   settingsOpen: boolean;          // Settings overlay state
   
   // Threshold event system
@@ -137,6 +159,23 @@ export interface GameState {
   choiceHistory: ChoiceRecord[];       // Track all choices made
   unlockedArchetypes: ArchetypeId[];   // Track unlocked archetypes
   pendingArchetype?: Archetype;        // Archetype waiting to be shown to player
+  
+  // Delayed consequences system
+  delayedQueue: DelayedEffect[];       // Queue of delayed consequences waiting to trigger
+  
+  // Resource change animations
+  activeResourceChanges: {
+    klient?: number;
+    tillit?: number;
+    penger?: number;
+    omdømme?: number;
+  };
+  
+  // Transition guard
+  isTransitioning: boolean;
+  
+  // Pending chain event to be processed in nextEvent
+  pendingChainEventId?: string;
 }
 
 // ============================================================================
