@@ -5,6 +5,7 @@ import { Event } from '@/types/game';
 import { useState } from 'react';
 import { useGameStore } from '@/store/gameStore';
 import { getColorSchemeConfig } from '@/data/colorSchemes';
+import ResourceExplanationCard from './ResourceExplanationCard';
 
 interface SwipeCardProps {
   event: Event;
@@ -24,6 +25,7 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
 
   const isNarrative = event.type === 'narrative';
   const isConsequenceCard = event.character === 'Konsekvens';
+  const isResourceExplanationCard = event.character === 'Ressurser';
   const hasResourceChanges = Object.keys(activeResourceChanges).some(
     key => activeResourceChanges[key as keyof typeof activeResourceChanges] !== undefined && 
            activeResourceChanges[key as keyof typeof activeResourceChanges] !== 0
@@ -165,20 +167,24 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
         flex-1 min-h-0 overflow-y-auto mb-3 sm:mb-4
         flex items-start
       `}>
-        <div className={`
-          rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6
-          w-full
-          ${hasSpecialVisuals
-            ? 'bg-amber-950/30 border border-amber-500/40 backdrop-blur-sm'
-            : isNarrative 
-              ? 'bg-blue-950/50 border border-blue-500/30 backdrop-blur-sm' 
-              : 'bg-slate-800/50 border border-slate-600/30 backdrop-blur-sm'
-          }
-        `}>
-          <p className="text-sm sm:text-base md:text-lg leading-relaxed text-slate-100 text-balance">
-            {event.text}
-          </p>
-        </div>
+        {isResourceExplanationCard ? (
+          <ResourceExplanationCard />
+        ) : (
+          <div className={`
+            rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6
+            w-full
+            ${hasSpecialVisuals
+              ? 'bg-amber-950/30 border border-amber-500/40 backdrop-blur-sm'
+              : isNarrative 
+                ? 'bg-blue-950/50 border border-blue-500/30 backdrop-blur-sm' 
+                : 'bg-slate-800/50 border border-slate-600/30 backdrop-blur-sm'
+            }
+          `}>
+            <p className="text-sm sm:text-base md:text-lg leading-relaxed text-slate-100 text-balance">
+              {event.text}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Choices or Continue Button */}
@@ -207,7 +213,54 @@ export default function SwipeCard({ event, onSwipeLeft, onSwipeRight, onContinue
             Fortsett →
           </button>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-2 sm:space-y-3">
+            {/* Double Impact Warning for Consequence Cards with Choices */}
+            {isConsequenceCard && hasResourceChanges && (
+              <div className="
+                bg-gradient-to-r from-amber-950/60 to-amber-900/60
+                border-2 border-amber-500/50
+                rounded-lg sm:rounded-xl
+                p-2.5 sm:p-3
+                backdrop-blur-sm
+                shadow-lg shadow-amber-500/20
+              ">
+                <div className="flex items-start gap-2 sm:gap-2.5">
+                  <span className="text-lg sm:text-xl flex-shrink-0">⚡</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[11px] sm:text-xs font-semibold text-amber-200 uppercase tracking-wider mb-1">
+                      Konsekvens allerede utløst
+                    </p>
+                    <div className="flex flex-wrap gap-x-2 gap-y-1">
+                      {Object.entries(activeResourceChanges)
+                        .filter(([_, value]) => value !== undefined && value !== 0)
+                        .map(([key, value]) => {
+                          const emoji = {
+                            klient: '💼',
+                            tillit: '🤝',
+                            penger: '💰',
+                            omdømme: '📰'
+                          }[key];
+                          const displayValue = value as number;
+                          return (
+                            <span 
+                              key={key}
+                              className={`
+                                text-xs sm:text-sm font-bold
+                                ${displayValue > 0 ? 'text-green-300' : 'text-red-300'}
+                              `}
+                            >
+                              {emoji} {displayValue > 0 ? '+' : ''}{displayValue}
+                            </span>
+                          );
+                        })}
+                    </div>
+                    <p className="text-[10px] sm:text-[11px] text-amber-300/80 mt-1 leading-tight">
+                      Ditt neste valg vil gi ytterligere konsekvenser
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
             {/* Choice labels for better context */}
             <div className="flex gap-2 sm:gap-3">
               {/* Left Choice Button */}

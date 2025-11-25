@@ -41,34 +41,355 @@ export const navKap1InsidenScenario: Scenario = {
     },
 
     // ============================================================================
-    // EVENT 2: Kristian - Første møte
+    // ACT 1: BYRÅKRATISK INTRODUKSJON (Event 4-15)
     // ============================================================================
+
+    // ============================================================================
+    // KRISTIAN (24 år) - Sosial Angst - 3 kort
+    // ============================================================================
+    
     {
-      id: 'nav_kap1_event2',
+      id: 'nav_kristian_1',
       act: 1,
       character: 'Kristian, 24 år',
       characterImage: '/placeholders/portrait-1.png',
-      text: 'Kristian forteller at han har prøvd å søke jobb i tre måneder uten hell. Han sliter med sosial angst etter mobbing på videregående, men har ikke formell diagnose. "Hvis jeg ikke får muligheten til folkehøyskole nå, blir jeg sittende hjemme i årevis," sier han rolig. Reglene sier han trenger minst 50% medisinsk nedsatt arbeidsevne for AAP. Han har ikke det.',
-      leftChoice: 'Strekk reglene - gi ham AAP',
-      rightChoice: 'Følg reglene - avslå, gi sosialhjelp',
+      text: 'Kristian søker om midlertidig fritak fra aktivitetsplikt. Han viser frem legenotater som beskriver sosial angst. Legen anbefaler gradvis tilnærming til arbeidsmarkedet. Standard prosedyre krever tilleggsutredning fra spesialist.',
+      leftChoice: 'Godkjenn 3 måneders fritak',
+      rightChoice: 'Krev tilleggsutredning',
       consequences: {
-        left: { klient: 20, omdømme: -15, tillit: -10, penger: -5 },
-        right: { omdømme: 10, tillit: 5, klient: -20, penger: 5 }
+        left: { klient: 5, tillit: 3, omdømme: -5, penger: -3 },
+        right: { omdømme: 5, penger: 2, klient: -2, tillit: 2 }
       },
       metadata: {
         choiceTags: {
-          left: ['rule-bender', 'client-first', 'pragmatic'],
+          left: ['client-first', 'pragmatic', 'social-worker'],
+          right: ['procedural', 'system-loyal', 'bureaucrat']
+        }
+      }
+    },
+
+    {
+      id: 'nav_kristian_2',
+      act: 1,
+      character: 'Kristian, 24 år',
+      characterImage: '/placeholders/portrait-1.png',
+      text: 'Kristian ber om forlengelse av fristen for jobbsøkingslogg. Han har sendt 5 søknader, men trenger mer tid per søknad for å gjøre det ordentlig. Standard frist er 1 uke, han ber om 2 uker.',
+      leftChoice: 'Gi 2 ukers frist',
+      rightChoice: 'Standard 1 uke',
+      consequences: {
+        left: { klient: 4, tillit: 2, omdømme: -4, penger: -2 },
+        right: { omdømme: 4, penger: 2, klient: -2, tillit: 2 }
+      },
+      metadata: {
+        choiceTags: {
+          left: ['client-first', 'flexible', 'social-worker'],
+          right: ['procedural', 'system-loyal', 'efficient']
+        }
+      }
+    },
+
+    {
+      id: 'nav_kristian_3',
+      act: 1,
+      character: 'Kristian, 24 år',
+      characterImage: '/placeholders/portrait-1.png',
+      text: 'Kristian ønsker plass på et mindre jobbsøkerkurs. Kurset har 8 deltakere i stedet for standard 20. Det koster 4.000kr mer, men han mener det vil være lettere for ham å delta aktivt.',
+      leftChoice: 'Godkjenn lite kurs',
+      rightChoice: 'Standard stort kurs',
+      consequences: {
+        left: { klient: 5, tillit: 3, penger: -5, omdømme: -4 },
+        right: { omdømme: 5, penger: 3, klient: -3, tillit: 2 }
+      },
+      metadata: {
+        choiceTags: {
+          left: ['client-first', 'budget-breaker', 'social-worker'],
+          right: ['penny-pincher', 'system-loyal', 'efficient']
+        },
+        delayed: {
+          right: {
+            turnsDelay: 10,
+            text: 'Kristian møtte ikke opp på kursdag 2. Han sender en melding: "Det var for mange mennesker. Jeg klarte ikke mer."',
+            resourceChange: { klient: -8, tillit: -6 }
+          }
+        }
+      }
+    },
+
+    // ============================================================================
+    // MOHAMMED (45 år) - Ryggskade - 3 kort
+    // ============================================================================
+
+    {
+      id: 'nav_mohammed_1',
+      act: 1,
+      character: 'Mohammed, 45 år',
+      characterImage: '/placeholders/portrait-2.png',
+      text: 'Mohammed ber om godkjenning for ergonomisk kontorstol til hjemmekontor. Fysioterapeuten har anbefalt dette i en rapport. Stolen koster 3.500kr. Standard prosedyre krever tilleggsutredning fra NAV-lege.',
+      leftChoice: 'Godkjenn raskt',
+      rightChoice: 'Krev tilleggsutredning',
+      consequences: {
+        left: { klient: 5, tillit: 3, penger: -5, omdømme: -4 },
+        right: { omdømme: 5, penger: 3, klient: -3, tillit: 2 }
+      },
+      metadata: {
+        choiceTags: {
+          left: ['client-first', 'pragmatic', 'social-worker'],
+          right: ['procedural', 'system-loyal', 'bureaucrat']
+        }
+      }
+    },
+
+    {
+      id: 'nav_mohammed_2',
+      act: 1,
+      character: 'Mohammed, 45 år',
+      characterImage: '/placeholders/portrait-2.png',
+      text: 'Mohammed vil bytte fra jobbsøkerkurs til arbeidstrening. Arbeidstreningplassen er mer praktisk rettet, men koster 8.000kr mer over 3 måneder. Han mener det passer bedre med hans fysiske begrensninger.',
+      leftChoice: 'Godkjenn byttet',
+      rightChoice: 'Følg opprinnelig plan',
+      consequences: {
+        left: { klient: 6, tillit: 4, penger: -6, omdømme: -5 },
+        right: { omdømme: 6, penger: 4, klient: -4, tillit: 3 }
+      },
+      metadata: {
+        choiceTags: {
+          left: ['client-first', 'flexible', 'budget-breaker'],
+          right: ['procedural', 'system-loyal', 'penny-pincher']
+        }
+      }
+    },
+
+    {
+      id: 'nav_mohammed_3',
+      act: 1,
+      character: 'Mohammed, 45 år',
+      characterImage: '/placeholders/portrait-2.png',
+      text: 'Mohammed ber om godkjenning for drosje til arbeidstrening i stedet for buss. Bussen har mange trapper og tar 50 minutter. Drosje koster 150kr per dag ekstra, men tar 15 minutter og er uten trapper.',
+      leftChoice: 'Godkjenn drosje',
+      rightChoice: 'Standard buss',
+      consequences: {
+        left: { klient: 5, tillit: 3, penger: -5, omdømme: -4 },
+        right: { omdømme: 5, penger: 3, klient: -3, tillit: 2 }
+      },
+      metadata: {
+        choiceTags: {
+          left: ['client-first', 'budget-breaker', 'social-worker'],
+          right: ['penny-pincher', 'system-loyal', 'efficient']
+        },
+        delayed: {
+          right: {
+            turnsDelay: 11,
+            text: 'Mohammed har sluttet på arbeidstreningplassen. Han skriver: "Reisen tok for mye energi. Jeg brukte hele dagen på det."',
+            resourceChange: { klient: -8, tillit: -6 }
+          }
+        }
+      }
+    },
+
+    // ============================================================================
+    // MIRA (31 år) - Alenemor - 3 kort
+    // ============================================================================
+
+    {
+      id: 'nav_mira_1',
+      act: 1,
+      character: 'Mira, 31 år',
+      characterImage: '/placeholders/portrait-4.png',
+      text: 'Mira ber om 500kr til transport til jobbintervju utenfor byen. Dette dekkes normalt ikke, men kan vurderes i spesielle tilfeller. Hun har tre barn og kan ikke låne bil.',
+      leftChoice: 'Godkjenn transportstøtte',
+      rightChoice: 'Forklar at det ikke dekkes',
+      consequences: {
+        left: { klient: 5, tillit: 3, penger: -5, omdømme: -4 },
+        right: { omdømme: 5, penger: 2, klient: -3, tillit: 2 }
+      },
+      metadata: {
+        choiceTags: {
+          left: ['client-first', 'rule-bender', 'social-worker'],
+          right: ['rule-follower', 'system-loyal', 'procedural']
+        }
+      }
+    },
+
+    {
+      id: 'nav_mira_2',
+      act: 1,
+      character: 'Mira, 31 år',
+      characterImage: '/placeholders/portrait-4.png',
+      text: 'Mira ber om fast møtetid kl 08:00 eller 16:00. Barnehagen åpner kl 07:30 og stenger kl 16:30. Standard møtetid er kl 10:00. Dette krever tilpasning av din kalender.',
+      leftChoice: 'Tilby fleksibel tid',
+      rightChoice: 'Standard tid',
+      consequences: {
+        left: { klient: 4, tillit: 2, omdømme: -4, penger: -2 },
+        right: { omdømme: 4, penger: 2, klient: -2, tillit: 2 }
+      },
+      metadata: {
+        choiceTags: {
+          left: ['client-first', 'flexible', 'social-worker'],
+          right: ['procedural', 'system-loyal', 'efficient']
+        }
+      }
+    },
+
+    {
+      id: 'nav_mira_3',
+      act: 1,
+      character: 'Mira, 31 år',
+      characterImage: '/placeholders/portrait-4.png',
+      text: 'Mira ber om hjelp til å fylle ut søknad om barnebidrag. Skjemaet er 12 sider og komplisert. Det vil ta deg cirka 30 minutter. Standard prosedyre er å henvise til veiledningstjenesten.',
+      leftChoice: 'Hjelp henne nå',
+      rightChoice: 'Henvise til veiledningstjeneste',
+      consequences: {
+        left: { klient: 5, tillit: 3, omdømme: -5, penger: -3 },
+        right: { omdømme: 5, penger: 2, klient: -3, tillit: 2 }
+      },
+      metadata: {
+        choiceTags: {
+          left: ['client-first', 'social-worker', 'pragmatic'],
+          right: ['procedural', 'system-loyal', 'efficient']
+        },
+        delayed: {
+          right: {
+            turnsDelay: 12,
+            text: 'Mira fikk ikke barnebidrag. Søknaden var feil utfylt. Veiledningstjenesten hadde 6 ukers ventetid. Hun måtte låne penger.',
+            resourceChange: { klient: -9, tillit: -7 }
+          }
+        }
+      }
+    },
+
+    // ============================================================================
+    // LINDA (38 år) - Tidligere Rusavhengig - 3 kort
+    // ============================================================================
+
+    {
+      id: 'nav_linda_1',
+      act: 1,
+      character: 'Linda, 38 år',
+      characterImage: '/placeholders/portrait-5.png',
+      text: 'Linda ber om ukentlige møter i stedet for standard månedlige. Hun sier det hjelper henne med struktur og ansvar. Dette vil kreve betydelig mer av din tid og ressurser.',
+      leftChoice: 'Godkjenn ukentlig',
+      rightChoice: 'Standard månedlig',
+      consequences: {
+        left: { klient: 6, tillit: 4, penger: -6, omdømme: -5 },
+        right: { omdømme: 7, penger: 4, klient: -4, tillit: 3 }
+      },
+      metadata: {
+        choiceTags: {
+          left: ['client-first', 'social-worker', 'intensive'],
+          right: ['procedural', 'system-loyal', 'efficient']
+        }
+      }
+    },
+
+    {
+      id: 'nav_linda_2',
+      act: 1,
+      character: 'Linda, 38 år',
+      characterImage: '/placeholders/portrait-5.png',
+      text: 'Linda ber om hjelp til å fylle ut søknad om kvalifiseringsstønad. Søknaden er omfattende og vil ta deg cirka 45 minutter. Standard er å henvise til veiledningstjenesten.',
+      leftChoice: 'Hjelp henne aktivt',
+      rightChoice: 'Henvise til veiledningstjeneste',
+      consequences: {
+        left: { klient: 5, tillit: 3, penger: -5, omdømme: -4 },
+        right: { omdømme: 5, penger: 3, klient: -3, tillit: 2 }
+      },
+      metadata: {
+        choiceTags: {
+          left: ['client-first', 'social-worker', 'pragmatic'],
+          right: ['procedural', 'system-loyal', 'efficient']
+        }
+      }
+    },
+
+    {
+      id: 'nav_linda_3',
+      act: 1,
+      character: 'Linda, 38 år',
+      characterImage: '/placeholders/portrait-5.png',
+      text: 'Linda ber om referansebrev til boligsøknad. Det er ikke standard NAV-prosedyre, men utleier krever det. Du kan skrive noen linjer om at hun er i aktiv oppfølging. Det tar 15 minutter.',
+      leftChoice: 'Skriv brev',
+      rightChoice: 'Avslå, ikke din rolle',
+      consequences: {
+        left: { klient: 5, tillit: 3, omdømme: -5, penger: -3 },
+        right: { omdømme: 5, penger: 2, klient: -3, tillit: 2 }
+      },
+      metadata: {
+        choiceTags: {
+          left: ['client-first', 'rule-bender', 'social-worker'],
           right: ['rule-follower', 'system-loyal', 'procedural']
         },
         delayed: {
+          right: {
+            turnsDelay: 13,
+            text: 'Linda fikk ikke leiligheten. Utleier ville ha referanse fra NAV. Hun bor fortsatt i midlertidig bolig.',
+            resourceChange: { klient: -9, tillit: -7 }
+          }
+        }
+      }
+    },
+
+    // ============================================================================
+    // EVENT 16: System-narrativ (Uke 4)
+    // ============================================================================
+    {
+      id: 'nav_act1_closure',
+      type: 'narrative',
+      act: 1,
+      character: 'Fire uker senere',
+      characterImage: '/placeholders/portrait-1.png',
+      text: 'Fire uker har gått. Du har møtt Kristian, Mohammed, Mira og Linda. Små beslutninger hver dag - frister, møtetider, budsjettsporsmål. Noen ganger hjalp du, andre ganger fulgte du prosedyrene. Du tenker: Dette er en jobb som alle andre. Men er det det?',
+    },
+
+    // ============================================================================
+    // ACT 2: ESKALERING (Event 17-30)
+    // ============================================================================
+
+    // ============================================================================
+    // EVENT 17: Revelation Moment
+    // ============================================================================
+    {
+      id: 'nav_revelation_act2',
+      type: 'narrative',
+      act: 2,
+      character: 'To måneder senere',
+      characterImage: '/placeholders/portrait-1.png',
+      text: 'De første ukene føltes håndterbare. Rutiner, prosedyrer, små justeringer. Men nå begynner du å se mønstre. Kristian møter ikke opp på kurset. Mohammed slutter på tiltaket. Mira venter fortsatt på barnebidrag. Linda fikk ikke leiligheten. De små valgene får større konsekvenser enn du tenkte.',
+      metadata: {
+        conditions: {
+          turn: { min: 17 }
+        }
+      }
+    },
+
+    // ============================================================================
+    // KRISTIAN - AAP Dilemma
+    // ============================================================================
+    {
+      id: 'nav_kristian_aap',
+      act: 2,
+      character: 'Kristian, 24 år',
+      characterImage: '/placeholders/portrait-1.png',
+      text: 'Kristian kommer tilbake. Han har ikke møtt på kurset de siste tre ukene. Han ser sliten ut. "Legen min vil skrive meg syk. Men jeg vil ikke bli sykmeldt. Jeg vil bare ha mer tid, kanskje folkehøyskole." Han oppfyller ikke AAP-kravet om 50% nedsatt arbeidsevne.',
+      leftChoice: 'Strekk reglene - gi AAP',
+      rightChoice: 'Følg regelverket',
+      consequences: {
+        left: { klient: 15, tillit: 10, penger: -12, omdømme: -15 },
+        right: { omdømme: 10, penger: 5, klient: -15, tillit: -12 }
+      },
+      metadata: {
+        choiceTags: {
+          left: ['rule-bender', 'client-first', 'courage'],
+          right: ['rule-follower', 'system-loyal', 'resigned']
+        },
+        delayed: {
           left: {
-            turnsDelay: 3,
-            text: 'Kristian har fått plass på folkehøyskole takket være AAP-en du ga ham. Men kontrollenheten har sett på saken. "Du ga AAP uten at brukeren oppfylte kravet om 50% nedsatt arbeidsevne. Dette er et regelbrudd."',
-            resourceChange: { klient: 10, omdømme: -15, tillit: -10 }
+            turnsDelay: 8,
+            text: 'Kontrollenheten har sett på saken. Du ga AAP uten medisinsk grunnlag. Lederen din må skrive rapport.',
+            resourceChange: { omdømme: -15, tillit: -10, klient: 5 }
           },
           right: {
-            turnsDelay: 3,
-            text: 'Kristian har blitt sykmeldt med depresjon. "Legen sa det var forventet gitt situasjonen," sier han. "Nå får jeg AAP, men jeg føler jeg måtte bli sykere for å få hjelp."',
+            turnsDelay: 8,
+            text: 'Kristian har blitt sykmeldt. Han fikk AAP til slutt, men måtte først bli registrert som syk. Han møter ikke blikket ditt.',
             resourceChange: { klient: -15, tillit: -15, omdømme: 5 }
           }
         }
@@ -76,855 +397,316 @@ export const navKap1InsidenScenario: Scenario = {
     },
 
     // ============================================================================
-    // EVENT 3: Mohammed - Første møte
+    // MOHAMMED - Tiltakskrise
     // ============================================================================
     {
-      id: 'nav_kap1_event3',
-      act: 1,
+      id: 'nav_mohammed_crisis',
+      act: 2,
       character: 'Mohammed, 45 år',
       characterImage: '/placeholders/portrait-2.png',
-      text: 'Mohammed er bygningsarbeider med kronisk ryggskade. Han kan jobbe 40%, men arbeidsmarkedet vil ha 100%. Han forsørger familie. "Jeg trenger hjelp til å finne deltidsarbeid, eller et tiltak som kan hjelpe meg videre," sier han. Du har budsjett til enten et dyrt arbeidstreningstiltak eller en billig løsning.',
-      leftChoice: 'Godkjenn dyrt tiltak',
-      rightChoice: 'Foreslå billig løsning',
+      text: 'Mohammed sitter i kontoret ditt. Han har ikke vært på tiltak på to uker. "Ryggen er verre. Legen sier jeg må hvile. Men jeg får beskjed om at ytelsen stoppes hvis jeg ikke møter opp. Hva skal jeg gjøre?"',
+      leftChoice: 'Gi sykefravær og fortsatt ytelse',
+      rightChoice: 'Ytelsen stoppes ved fravær',
       consequences: {
-        left: { klient: 15, tillit: 10, penger: -20, omdømme: -5 },
-        right: { penger: 10, omdømme: 5, klient: -15, tillit: -5 }
+        left: { klient: 15, tillit: 12, penger: -15, omdømme: -18 },
+        right: { omdømme: 12, penger: 10, klient: -18, tillit: -15 }
       },
       metadata: {
         choiceTags: {
-          left: ['client-first', 'budget-breaker', 'social-worker'],
-          right: ['penny-pincher', 'pragmatic', 'bureaucrat']
+          left: ['client-first', 'rule-bender', 'social-worker'],
+          right: ['system-loyal', 'rule-follower', 'resigned']
         },
         delayed: {
           left: {
-            turnsDelay: 2,
-            text: 'Budsjettet ditt er sprengt etter å ha godkjent dyrt tiltak for Mohammed. Du må nå kutte i andre tiltak for å balansere budsjettet. Brukerne som får tiltakene sine kuttet er misfornøyde.',
-            resourceChange: { penger: -15, klient: -15, omdømme: -10 }
-          }
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 4: Ledelsens forventninger (Meta-event)
-    // ============================================================================
-    {
-      id: 'nav_kap1_event4',
-      act: 1,
-      character: 'Din leder',
-      characterImage: '/placeholders/portrait-3.png',
-      text: 'Din leder kaller deg inn. "Dere ligger under på arbeidsformidling. Vi må få flere ut i jobb. Måloppnåelsen er viktig." Hun ser på deg. "Du kan enten prioritere kvantitet - mange raske samtaler - eller kvalitet - grundig oppfølging av færre. Hva velger du?"',
-      leftChoice: 'Prioriter kvalitet',
-      rightChoice: 'Prioriter kvantitet',
-      consequences: {
-        left: { tillit: 15, klient: 10, omdømme: -15, penger: -10 },
-        right: { omdømme: 15, penger: 10, tillit: -15, klient: -10 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['social-worker', 'client-first', 'ethical'],
-          right: ['system-loyal', 'bureaucrat', 'pragmatic']
-        },
-        delayed: {
-          left: {
-            turnsDelay: 4,
-            text: 'Du har prioritert kvalitet over kvantitet. Brukerne får bedre oppfølging, men måloppnåelsen er lavere. Lederen din stiller spørsmål om hvorfor du ikke får flere ut i jobb.',
-            resourceChange: { klient: 10, tillit: 15, omdømme: -20 }
+            turnsDelay: 7,
+            text: 'Lederen din kaller deg inn. "Mohammed har hatt sykefravær i 6 uker nå. Budsjettet tåler ikke dette. Vi må gjøre noe."',
+            resourceChange: { omdømme: -12, penger: -10 }
           },
           right: {
-            turnsDelay: 4,
-            text: 'Du har prioritert kvantitet. Måloppnåelsen er bedre, men brukerne klager på manglende oppfølging. "Jeg føler meg ikke hørt," sier en bruker.',
-            resourceChange: { omdømme: 10, klient: -20, tillit: -15 }
+            turnsDelay: 7,
+            text: 'Mohammed har søkt om sosialhjelp. Han har ikke råd til medisiner lenger. Hans kone ringer deg og gråter.',
+            resourceChange: { klient: -20, tillit: -18 }
           }
         }
       }
     },
 
     // ============================================================================
-    // EVENT 5: Mira - Første møte
+    // MIRA - Barnas behov
     // ============================================================================
     {
-      id: 'nav_kap1_event5',
-      act: 1,
+      id: 'nav_mira_children',
+      act: 2,
       character: 'Mira, 31 år',
       characterImage: '/placeholders/portrait-4.png',
-      text: 'Mira er alenemor til tre barn. Hun er på sosialhjelp etter samlivsbrudd. "Datteren min trenger tannregulering. Det koster 35.000 kroner. Hun blir mobbet på skolen." Hun ser på deg. "Kan ikke barnet mitt få hjelp?" Reglene sier sosialhjelp dekker kun livsopphold, ikke barnebehov som tannregulering.',
-      leftChoice: 'Godkjenn tannregulering',
-      rightChoice: 'Avslå - følg reglene',
+      text: 'Mira viser deg et brev fra skolen. Datteren trenger tannregulering, 35.000kr. Hun blir mobbet for tennene. Sosialhjelp dekker ikke tannregulering. Mira har prøvd alt annet. Hun ser på deg. "Er det virkelig ingen mulighet?"',
+      leftChoice: 'Finn en måte å godkjenne det',
+      rightChoice: 'Forklar at regelverket ikke tillater det',
       consequences: {
-        left: { klient: 25, tillit: 10, omdømme: -20, penger: -25 },
-        right: { omdømme: 10, penger: 5, klient: -25, tillit: -15 }
+        left: { klient: 18, tillit: 12, penger: -20, omdømme: -20 },
+        right: { omdømme: 12, penger: 8, klient: -20, tillit: -18 }
       },
       metadata: {
         choiceTags: {
-          left: ['rule-bender', 'client-first', 'social-worker'],
-          right: ['rule-follower', 'system-loyal', 'bureaucrat']
-        },
-        chains: {
-          left: 'nav_kap1_event5_chain_approval',
-          right: 'nav_kap1_event5_chain_rejection'
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 5 CHAIN: Andre brukere ber om ekstra hjelp (hvis godkjente Mira)
-    // ============================================================================
-    {
-      id: 'nav_kap1_event5_chain_approval',
-      act: 1,
-      character: 'Andre brukere',
-      characterImage: '/placeholders/portrait-2.png',
-      text: 'Ordet sprer seg. "Du ga Mira ekstra hjelp. Kan jeg også få?" Flere brukere ber om unntak. Du må enten gi alle samme behandling eller forklare hvorfor noen får mer enn andre.',
-      leftChoice: 'Gi alle samme behandling',
-      rightChoice: 'Forklar at hver sak er unik',
-      consequences: {
-        left: { klient: 15, penger: -30, omdømme: -15, tillit: 5 },
-        right: { omdømme: 10, tillit: 10, klient: -10, penger: -5 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['fairness', 'client-first', 'budget-breaker'],
-          right: ['pragmatic', 'procedural', 'social-worker']
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 5 CHAIN: Mira sin situasjon forverres (hvis avslo)
-    // ============================================================================
-    {
-      id: 'nav_kap1_event5_chain_rejection',
-      act: 1,
-      character: 'Mira, 31 år',
-      characterImage: '/placeholders/portrait-4.png',
-      text: 'Mira kommer tilbake. "Datteren min gråter hver kveld. Hun vil ikke gå på skolen lenger. Jeg har prøvd alt - lånt penger, spurt familie. Ingen kan hjelpe." Hun ser på deg. "Er det virkelig ingen måte?"',
-      leftChoice: 'Forsøk å finne en løsning',
-      rightChoice: 'Hold deg til reglene',
-      consequences: {
-        left: { klient: 20, tillit: 15, omdømme: -15, penger: -20 },
-        right: { omdømme: 5, penger: 5, klient: -20, tillit: -20 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['client-first', 'social-worker', 'courage'],
-          right: ['system-loyal', 'resigned', 'bureaucrat']
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 6: Kristian - Oppfølging
-    // ============================================================================
-    {
-      id: 'nav_kap1_event6_followup',
-      act: 1,
-      character: 'Kristian, 24 år',
-      characterImage: '/placeholders/portrait-1.png',
-      text: 'Kristian ringer for oppfølging. "Jeg har søkt på folkehøyskole. Men jeg trenger et brev fra deg som støtter søknaden min. Kan du skrive det?" Du vet at et støttebrev kan hjelpe, men det er ikke en del av din formelle rolle.',
-      leftChoice: 'Skriv støttebrev',
-      rightChoice: 'Avslå - ikke min rolle',
-      consequences: {
-        left: { klient: 15, tillit: 10, omdømme: -10 },
-        right: { omdømme: 5, klient: -15, tillit: -5 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['client-first', 'social-worker', 'pragmatic'],
-          right: ['system-loyal', 'procedural', 'bureaucrat']
+          left: ['rule-bender', 'client-first', 'courage'],
+          right: ['rule-follower', 'system-loyal', 'resigned']
         },
         delayed: {
           left: {
-            turnsDelay: 3,
-            text: 'Kristian har fått plass på folkehøyskole. Han ringer for å takke deg. "Uten støttebrevet ditt hadde jeg ikke fått plass. Takk." Du føler deg god, men lederen din stiller spørsmål om hvorfor du skriver støttebrev utenfor systemet.',
-            resourceChange: { klient: 10, tillit: 10, omdømme: -10 }
-          }
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 7: Mohammed - Oppfølging
-    // ============================================================================
-    {
-      id: 'nav_kap1_event7_followup',
-      act: 1,
-      character: 'Mohammed, 45 år',
-      characterImage: '/placeholders/portrait-2.png',
-      text: 'Mohammed har vært på tiltaket i to måneder. "Jeg lærer mye, men jeg trenger mer tid. Kan vi forlenge tiltaket?" Du ser på budsjettet. Forlengelse koster ekstra, men kan gi Mohammed bedre sjanser.',
-      leftChoice: 'Forleng tiltaket',
-      rightChoice: 'Avslå - budsjettet er stramt',
-      consequences: {
-        left: { klient: 15, tillit: 10, penger: -20, omdømme: -10 },
-        right: { penger: 10, omdømme: 5, klient: -15, tillit: -10 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['client-first', 'budget-breaker', 'social-worker'],
-          right: ['penny-pincher', 'system-loyal', 'pragmatic']
-        },
-        delayed: {
-          left: {
-            turnsDelay: 2,
-            text: 'Mohammed har fullført det forlengede tiltaket. Han har fått jobbtilbud på 40% stilling. "Takk for at du trodde på meg," sier han. Men budsjettet ditt er nå mer stramt.',
-            resourceChange: { klient: 20, tillit: 15, penger: -10, omdømme: 5 }
+            turnsDelay: 9,
+            text: 'Regnskapskontoret har flagget utbetalingen. "Dette var ikke innenfor sosialhjelp-reglene. Hvordan ble dette godkjent?"',
+            resourceChange: { omdømme: -15, penger: -10, klient: 10 }
           },
           right: {
-            turnsDelay: 2,
-            text: 'Mohammed har ikke fått jobb etter tiltaket. Han ringer deg. "Jeg føler jeg ikke fikk nok tid. Kanskje jeg trengte mer oppfølging?" Du vet han har rett.',
-            resourceChange: { klient: -15, tillit: -15, penger: 5 }
+            turnsDelay: 9,
+            text: 'Skolen har ringt barnevernet. Datteren kommer ikke på skolen lenger. Mira ringer deg og gråter.',
+            resourceChange: { klient: -25, tillit: -20 }
           }
         }
       }
     },
 
     // ============================================================================
-    // EVENT 8: Systemutfordring - Nye regler
+    // LINDA - Fagbrev-sjanse
     // ============================================================================
     {
-      id: 'nav_kap1_event8_system',
-      act: 1,
-      character: 'Departementet',
-      characterImage: '/placeholders/portrait-3.png',
-      text: 'Ny instruks fra departementet: Alle AAP-søknader må nå ha minst tre legeerklæringer i stedet for én. "Dette er for å sikre kvalitet," sier instruksen. Du vet at dette vil gjøre det vanskeligere for brukerne å få hjelp.',
-      leftChoice: 'Følg nye regler strengt',
-      rightChoice: 'Fortsett med gammel praksis',
-      consequences: {
-        left: { omdømme: 15, tillit: -15, klient: -20, penger: 5 },
-        right: { klient: 10, tillit: 10, omdømme: -20, penger: -5 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['system-loyal', 'rule-follower', 'bureaucrat'],
-          right: ['rule-bender', 'client-first', 'system-fighter']
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 9: Midtpunkt refleksjon (Conditional - vises kun hvis tillit < 40)
-    // ============================================================================
-    {
-      id: 'nav_kap1_event6',
-      type: 'narrative',
-      character: 'Refleksjon',
-      characterImage: '/placeholders/portrait-3.png',
-      text: 'Du sitter med en kaffe og tenker. Er det mulig å være et godt menneske i et dårlig system? Hver dag må du velge mellom mennesket og reglene. Mellom å hjelpe og å følge instrukser. Du begynner å forstå at problemet ikke er deg - det er strukturen.',
-      metadata: {
-        conditions: {
-          resources: {
-            tillit: { max: 40 }
-          }
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 10: Linda - Oppfølging
-    // ============================================================================
-    {
-      id: 'nav_kap1_event10_followup',
+      id: 'nav_linda_education',
       act: 2,
       character: 'Linda, 38 år',
       characterImage: '/placeholders/portrait-5.png',
-      text: 'Linda har startet på fagbrev-utdanningen. "Det går bra, men jeg sliter med å kombinere skole og hjemme. Jeg trenger hjelp til barnehageplass for de yngste barna mine." Du kan enten hjelpe henne med å finne løsninger eller henvise henne til andre tjenester.',
-      leftChoice: 'Hjelp henne aktivt',
-      rightChoice: 'Henvise til andre tjenester',
+      text: 'Linda har en mulighet. Fagbrev som helsefagarbeider. 2 år, full finansiering trengs. Hun har søkt før og mislyktes. Systemet er skeptisk. Men hun ser annerledes ut nå. "Jeg er klar denne gangen. Jeg vet det. Kan jeg få sjansen?"',
+      leftChoice: 'Gi henne sjansen',
+      rightChoice: 'For mange tidligere forsøk',
       consequences: {
-        left: { klient: 20, tillit: 15, penger: -15, omdømme: -10 },
-        right: { omdømme: 5, penger: 5, klient: -15, tillit: -10 }
+        left: { klient: 18, tillit: 15, penger: -18, omdømme: -15 },
+        right: { omdømme: 15, penger: 12, klient: -18, tillit: -15 }
       },
       metadata: {
         choiceTags: {
-          left: ['client-first', 'social-worker', 'courage'],
-          right: ['system-loyal', 'procedural', 'bureaucrat']
+          left: ['client-first', 'courage', 'social-worker'],
+          right: ['system-loyal', 'pragmatic', 'resigned']
         },
         delayed: {
           left: {
-            turnsDelay: 3,
-            text: 'Linda har fullført første år på fagbrev-utdanningen. Hun ringer deg. "Takk for at du hjalp meg med barnehageplass. Uten det hadde jeg ikke klart det." Du føler deg stolt, men har brukt mye tid på henne.',
-            resourceChange: { klient: 15, tillit: 15, omdømme: -5 }
+            turnsDelay: 10,
+            text: 'Linda har fullført første semester med A i alle fag. Hun ringer og takker deg. Du hører stolthet i stemmen hennes.',
+            resourceChange: { klient: 20, tillit: 20, omdømme: -5 }
           },
           right: {
-            turnsDelay: 3,
-            text: 'Linda har droppet ut av fagbrev-utdanningen. "Jeg klarte ikke å kombinere det med barna," sier hun. Du vet at aktiv hjelp kunne ha gjort forskjellen.',
-            resourceChange: { klient: -20, tillit: -20, penger: 10 }
+            turnsDelay: 10,
+            text: 'Du ser Linda på gaten. Hun snur seg bort. En kollega forteller deg senere at hun har falt tilbake.',
+            resourceChange: { klient: -22, tillit: -20 }
           }
         }
       }
     },
 
     // ============================================================================
-    // EVENT 11: Budsjettkrise
+    // SYSTEM EVENT - Budsjettkrise
     // ============================================================================
     {
-      id: 'nav_kap1_event11_budget',
+      id: 'nav_budget_crisis',
       act: 2,
       character: 'Din leder',
       characterImage: '/placeholders/portrait-3.png',
-      text: 'Budsjettet ditt er sprengt. "Du har brukt 30% mer enn du skulle denne måneden. Dette kan ikke fortsette." Du må enten kutte i eksisterende tiltak eller be om ekstra midler fra ledelsen.',
+      text: 'Lederen kaller deg inn. Tallene ligger på bordet. Budsjettet er 25% over. Måloppnåelsen er under. "Du må enten kutte i eksisterende tiltak eller be om ekstra midler. Jeg kan ikke garantere at du får dem."',
       leftChoice: 'Be om ekstra midler',
       rightChoice: 'Kutt i eksisterende tiltak',
       consequences: {
-        left: { omdømme: -20, penger: 20, klient: 10, tillit: 5 },
-        right: { omdømme: 10, penger: 15, klient: -25, tillit: -20 }
+        left: { omdømme: -20, penger: 20, klient: 8, tillit: 8 },
+        right: { omdømme: 12, penger: 18, klient: -22, tillit: -20 }
       },
       metadata: {
         choiceTags: {
-          left: ['client-first', 'courage', 'budget-breaker'],
-          right: ['penny-pincher', 'system-loyal', 'resigned']
+          left: ['courage', 'client-first', 'budget-breaker'],
+          right: ['pragmatic', 'system-loyal', 'resigned']
         }
       }
     },
 
     // ============================================================================
-    // EVENT 12: Kristian kommer tilbake - Variant A (hvis valgte left i Event 2)
+    // ACT 3: KRISE OG KONKLUSJON (Event 26+)
     // ============================================================================
-    {
-      id: 'nav_kap1_event7_variantA',
-      act: 2,
-      character: 'Kontrollenheten',
-      characterImage: '/placeholders/portrait-5.png',
-      text: 'Kontrollenheten har sett på saken din. "Du ga Kristian AAP uten at han oppfylte kravet om 50% nedsatt arbeidsevne. Dette er et regelbrudd." Din leder er involvert. "Du må forstå at vi ikke kan strekke reglene for alle. Dette påvirker måloppnåelsen."',
-      leftChoice: 'Forsvar valget ditt',
-      rightChoice: 'Aksepter kritikken',
-      consequences: {
-        left: { tillit: 15, omdømme: -20, klient: 5 },
-        right: { omdømme: 10, tillit: -10, klient: -5 }
-      },
-      metadata: {
-        conditions: {
-          previousEvents: ['nav_kap1_event2:left']
-        },
-        choiceTags: {
-          left: ['courage', 'client-first', 'system-fighter'],
-          right: ['resigned', 'system-loyal', 'bureaucrat']
-        }
-      }
-    },
 
     // ============================================================================
-    // EVENT 13: Kristian kommer tilbake - Variant B (hvis valgte right i Event 2)
+    // ACT 3 INTRO
     // ============================================================================
     {
-      id: 'nav_kap1_event7_variantB',
-      act: 2,
-      character: 'Kristian, 24 år',
-      characterImage: '/placeholders/portrait-1.png',
-      text: 'Kristian kommer tilbake. Han ser annerledes ut. "Jeg ble sykmeldt med depresjon," sier han rolig. "Legen sa det var forventet gitt situasjonen. Nå får jeg AAP, men... jeg føler jeg måtte bli sykere for å få hjelp." Han ser på deg. "Er det slik det skal være?"',
-      leftChoice: 'Erkjenn at systemet feilet',
-      rightChoice: 'Forsvar reglene',
-      consequences: {
-        left: { tillit: 15, klient: 10, omdømme: -10 },
-        right: { omdømme: 5, tillit: -15, klient: -10 }
-      },
-      metadata: {
-        conditions: {
-          previousEvents: ['nav_kap1_event2:right']
-        },
-        choiceTags: {
-          left: ['ethical', 'system-fighter', 'social-worker'],
-          right: ['system-loyal', 'resigned', 'bureaucrat']
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 14: Mohammed i krise
-    // ============================================================================
-    {
-      id: 'nav_kap1_event8',
-      act: 2,
-      character: 'Mohammed, 45 år',
-      characterImage: '/placeholders/portrait-2.png',
-      text: 'Mohammed ringer deg. "Budsjettet mitt er tomt. Jeg trenger akutt hjelp - et arbeidstreningskurs eller noe. Ellers må jeg stoppe ytelsen min for å \'motivere\' meg selv." Du ser på budsjettet ditt. Det er stramt. Du kan enten bryte budsjettrammen eller støtte opp om at han stopper ytelsen.',
-      leftChoice: 'Bruk budsjettet - gi ham tiltak',
-      rightChoice: 'Støtt stopp av ytelse',
-      consequences: {
-        left: { klient: 20, tillit: 10, penger: -25, omdømme: -15 },
-        right: { penger: 15, omdømme: 10, klient: -25, tillit: -20 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['budget-breaker', 'client-first', 'social-worker'],
-          right: ['penny-pincher', 'system-loyal', 'resigned']
-        },
-        chains: {
-          left: 'nav_kap1_event14_chain_budget',
-          right: 'nav_kap1_event14_chain_motivation'
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 14 CHAIN: Budsjettkrise etter å ha brukt budsjettet
-    // ============================================================================
-    {
-      id: 'nav_kap1_event14_chain_budget',
-      act: 2,
-      character: 'Din leder',
-      characterImage: '/placeholders/portrait-3.png',
-      text: 'Budsjettet ditt er nå kritisk lavt. "Du har brukt alt for mye på Mohammed. Dette kan ikke fortsette." Du må enten be om ekstra midler eller kutte i andre tiltak.',
-      leftChoice: 'Be om ekstra midler',
-      rightChoice: 'Kutt i andre tiltak',
-      consequences: {
-        left: { omdømme: -20, penger: 20, klient: 5, tillit: 5 },
-        right: { omdømme: 10, penger: 15, klient: -20, tillit: -15 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['courage', 'budget-breaker', 'client-first'],
-          right: ['penny-pincher', 'system-loyal', 'resigned']
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 14 CHAIN: Mohammed sin reaksjon på stopp av ytelse
-    // ============================================================================
-    {
-      id: 'nav_kap1_event14_chain_motivation',
-      act: 2,
-      character: 'Mohammed, 45 år',
-      characterImage: '/placeholders/portrait-2.png',
-      text: 'Mohammed har stoppet ytelsen sin for å "motivere" seg selv. "Jeg prøver alt jeg kan, men jeg finner ikke jobb. Familien min sliter." Du ser at strategien ikke fungerer.',
-      leftChoice: 'Gi ham tiltak likevel',
-      rightChoice: 'Hold deg til beslutningen',
-      consequences: {
-        left: { klient: 20, tillit: 15, penger: -20, omdømme: -10 },
-        right: { omdømme: 5, penger: 10, klient: -25, tillit: -20 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['client-first', 'social-worker', 'courage'],
-          right: ['system-loyal', 'resigned', 'bureaucrat']
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 15: Linda - Første møte
-    // ============================================================================
-    {
-      id: 'nav_kap1_event9',
-      act: 2,
-      character: 'Linda, 38 år',
-      characterImage: '/placeholders/portrait-5.png',
-      text: 'Linda har vært NAV-bruker i flere år. Tidligere rusavhengig, men clean i to år nå. Hun vil ta fagbrev som helsefagarbeider. "Jeg har fått så mange sjanser før, og jeg har misligholdt dem. Men nå er jeg klar. Kan jeg få én sjanse til?" Systemet er skeptisk basert på historikken.',
-      leftChoice: 'Gi henne én sjanse til',
-      rightChoice: 'Avslå - hun har fått for mange sjanser',
-      consequences: {
-        left: { klient: 20, tillit: 15, penger: -20, omdømme: -10 },
-        right: { omdømme: 10, penger: 10, klient: -20, tillit: -15 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['client-first', 'social-worker', 'courage'],
-          right: ['system-loyal', 'pragmatic', 'resigned']
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 16: Systemkrise (Narrative)
-    // ============================================================================
-    {
-      id: 'nav_kap1_event10',
+      id: 'nav_act3_intro',
       type: 'narrative',
-      act: 2,
-      character: 'Systemkrise',
-      characterImage: '/placeholders/portrait-3.png',
-      text: 'NAVs IT-system er nede i tre dager. Eller kanskje det er en ny instruks fra departementet om strengere krav. Uansett: Du kan ikke gjøre jobben din som vanlig. Brukerne venter. Du venter. Systemet fungerer ikke. Dette er ikke ditt valg, men du må håndtere konsekvensene.',
-    },
-
-    // ============================================================================
-    // EVENT 19: Mohammed - Tredje møte
-    // ============================================================================
-    {
-      id: 'nav_kap1_event19',
-      act: 2,
-      character: 'Mohammed, 45 år',
-      characterImage: '/placeholders/portrait-2.png',
-      text: 'Mohammed har funnet deltidsarbeid, men arbeidsgiveren krever at han jobber 100% eller ikke i det hele tatt. "Jeg kan ikke jobbe mer enn 40% på grunn av ryggen min. Hva skal jeg gjøre?" Du kan enten hjelpe ham med å forhandle eller henvise ham til arbeidsrettet tiltak.',
-      leftChoice: 'Hjelp med forhandling',
-      rightChoice: 'Henvise til arbeidsrettet tiltak',
-      consequences: {
-        left: { klient: 20, tillit: 15, penger: -10, omdømme: -5 },
-        right: { omdømme: 10, penger: 5, klient: -15, tillit: -10 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['client-first', 'social-worker', 'courage'],
-          right: ['system-loyal', 'procedural', 'bureaucrat']
-        },
-        delayed: {
-          left: {
-            turnsDelay: 2,
-            text: 'Mohammed har fått tilpasset arbeidsplass takket være din hjelp. "Jeg kan jobbe 40% nå, og det fungerer perfekt," sier han. Du føler deg stolt, men har brukt mye tid.',
-            resourceChange: { klient: 15, tillit: 15, omdømme: 5 }
-          }
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 20: Ledelsens press
-    // ============================================================================
-    {
-      id: 'nav_kap1_event20',
-      act: 2,
-      character: 'Din leder',
-      characterImage: '/placeholders/portrait-3.png',
-      text: 'Din leder kaller deg inn igjen. "Måloppnåelsen er fortsatt for lav. Du må få flere ut i jobb. Vi vurderer å kutte i personalet hvis tallene ikke bedrer seg." Hun ser på deg. "Hva skal du gjøre for å forbedre dette?"',
-      leftChoice: 'Fokusere på kvalitet over kvantitet',
-      rightChoice: 'Prioritere antall ut i jobb',
-      consequences: {
-        left: { tillit: 15, klient: 10, omdømme: -20, penger: -10 },
-        right: { omdømme: 20, penger: 10, tillit: -20, klient: -15 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['social-worker', 'client-first', 'ethical'],
-          right: ['system-loyal', 'bureaucrat', 'pragmatic']
-        },
-        delayed: {
-          right: {
-            turnsDelay: 3,
-            text: 'Du har fått flere ut i jobb ved å prioritere kvantitet. Måloppnåelsen er bedre. Men brukerne klager på manglende oppfølging. "Jeg føler meg ikke hørt," sier en bruker.',
-            resourceChange: { omdømme: 10, klient: -20, tillit: -15 }
-          }
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 21: Mira - Oppfølging
-    // ============================================================================
-    {
-      id: 'nav_kap1_event21',
-      act: 2,
-      character: 'Mira, 31 år',
-      characterImage: '/placeholders/portrait-4.png',
-      text: 'Mira kommer tilbake. "Datteren min har fortsatt problemer på skolen. Hun trenger psykologhjelp nå også. Kan NAV hjelpe med det?" Du vet at psykologhjelp ikke er dekket av sosialhjelp, men datteren trenger hjelp.',
-      leftChoice: 'Forsøk å finne en løsning',
-      rightChoice: 'Forklar at det ikke er dekket',
-      consequences: {
-        left: { klient: 20, tillit: 15, penger: -20, omdømme: -15 },
-        right: { omdømme: 10, penger: 5, klient: -25, tillit: -20 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['client-first', 'social-worker', 'courage'],
-          right: ['system-loyal', 'rule-follower', 'bureaucrat']
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 17: Det umulige valget
-    // ============================================================================
-    {
-      id: 'nav_kap1_event11',
       act: 3,
-      character: 'Din leder',
-      characterImage: '/placeholders/portrait-3.png',
-      text: 'Budsjettkutt: 20% mindre til oppfølging neste år. "Du må velge," sier lederen din. "Enten halverer du tiden med alle brukerne - 15 minutter per uke i stedet for 30. Eller du kutter 20% av brukerne helt. Hvilke skal vi prioritere?" Det finnes ingen god løsning.',
-      leftChoice: 'Halver tiden med alle',
-      rightChoice: 'Kutt 20% av brukerne',
-      consequences: {
-        left: { penger: 15, omdømme: 5, klient: -20, tillit: -25 },
-        right: { penger: 20, omdømme: 10, klient: -30, tillit: -30 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['pragmatic', 'fairness', 'resigned'],
-          right: ['system-loyal', 'penny-pincher', 'burnout-risk']
-        },
-        chains: {
-          left: 'nav_kap1_event17_chain_timecut',
-          right: 'nav_kap1_event17_chain_usercut'
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 17 CHAIN: Konsekvenser av å halvere tiden
-    // ============================================================================
-    {
-      id: 'nav_kap1_event17_chain_timecut',
-      act: 3,
-      character: 'Brukerne',
-      characterImage: '/placeholders/portrait-2.png',
-      text: 'Brukerne merker at du har mindre tid. "Jeg føler meg ikke hørt lenger," sier en. "15 minutter er ikke nok til å snakke om alt." Du ser at kvaliteten på oppfølgingen lider.',
-      leftChoice: 'Forsøk å gjøre mer på kort tid',
-      rightChoice: 'Aksepter at kvaliteten lider',
-      consequences: {
-        left: { tillit: 10, klient: 5, omdømme: -10, penger: -5 },
-        right: { omdømme: 5, penger: 5, klient: -15, tillit: -20 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['client-first', 'social-worker', 'burnout-risk'],
-          right: ['resigned', 'system-loyal', 'pragmatic']
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 17 CHAIN: Konsekvenser av å kutte brukere
-    // ============================================================================
-    {
-      id: 'nav_kap1_event17_chain_usercut',
-      act: 3,
-      character: 'Brukerne som ble kuttet',
+      character: 'Seks måneder senere',
       characterImage: '/placeholders/portrait-1.png',
-      text: 'Brukerne du kuttet ringer deg. "Hvorfor fikk jeg ikke lenger hjelp? Jeg trenger det fortsatt." Du må forklare at budsjettet tvinger deg til å prioritere. Det føles feil.',
-      leftChoice: 'Forsøk å hjelpe dem likevel',
-      rightChoice: 'Hold deg til beslutningen',
-      consequences: {
-        left: { klient: 15, tillit: 10, penger: -20, omdømme: -15 },
-        right: { omdømme: 10, penger: 10, klient: -25, tillit: -25 }
-      },
+      text: 'Seks måneder som NAV-saksbehandler. Du vet nå at små valg får store konsekvenser. At systemet har grenser. At du må velge mellom mennesker og måloppnåelse. Mellom faglig skjønn og budsjett. Nå kommer de vanskeligste valgene.',
       metadata: {
-        choiceTags: {
-          left: ['client-first', 'social-worker', 'courage'],
-          right: ['system-loyal', 'resigned', 'bureaucrat']
+        conditions: {
+          turn: { min: 26 }
         }
       }
     },
 
     // ============================================================================
-    // EVENT 22: Linda - Tredje møte
+    // KRISTIAN - Oppfølging
     // ============================================================================
     {
-      id: 'nav_kap1_event22',
-      act: 3,
-      character: 'Linda, 38 år',
-      characterImage: '/placeholders/portrait-5.png',
-      text: 'Linda har fullført første år på fagbrev-utdanningen. "Jeg trenger hjelp til å finne praksisplass. Uten det kan jeg ikke fortsette." Du kan enten hjelpe henne aktivt med å finne praksisplass eller henvise henne til standard rutiner.',
-      leftChoice: 'Hjelp aktivt med praksisplass',
-      rightChoice: 'Henvise til standard rutiner',
-      consequences: {
-        left: { klient: 20, tillit: 15, penger: -15, omdømme: -10 },
-        right: { omdømme: 10, penger: 5, klient: -20, tillit: -15 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['client-first', 'social-worker', 'courage'],
-          right: ['system-loyal', 'procedural', 'bureaucrat']
-        },
-        delayed: {
-          left: {
-            turnsDelay: 2,
-            text: 'Linda har fått praksisplass takket være din hjelp. "Jeg er så takknemlig," sier hun. "Uten deg hadde jeg ikke klart det." Du føler deg stolt, men har brukt mye ressurser.',
-            resourceChange: { klient: 20, tillit: 20, omdømme: -5 }
-          }
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 23: Kristian - Tredje møte
-    // ============================================================================
-    {
-      id: 'nav_kap1_event23',
+      id: 'nav_kristian_followup',
       act: 3,
       character: 'Kristian, 24 år',
       characterImage: '/placeholders/portrait-1.png',
-      text: 'Kristian har fullført folkehøyskole. "Jeg har lært mye, men jeg vet fortsatt ikke hva jeg vil gjøre. Kan jeg få hjelp til å finne ut av det?" Du kan enten gi ham ekstra oppfølging eller henvise ham til standard arbeidsrettet tiltak.',
-      leftChoice: 'Gi ekstra oppfølging',
-      rightChoice: 'Henvise til standard tiltak',
+      text: 'Kristian sitter foran deg. Seks måneder har gått. Han har enten AAP og folkehøyskole, eller han har vært sykmeldt. "Hva nå?" spør han. Du ser usikkerheten i øynene hans.',
+      leftChoice: 'Gi grundig oppfølging',
+      rightChoice: 'Standard tiltak',
       consequences: {
-        left: { klient: 15, tillit: 10, penger: -15, omdømme: -10 },
-        right: { omdømme: 10, penger: 5, klient: -15, tillit: -10 }
+        left: { klient: 18, tillit: 15, penger: -18, omdømme: -15 },
+        right: { omdømme: 15, penger: 12, klient: -18, tillit: -15 }
       },
       metadata: {
         choiceTags: {
-          left: ['client-first', 'social-worker', 'pragmatic'],
-          right: ['system-loyal', 'procedural', 'bureaucrat']
+          left: ['client-first', 'social-worker', 'intensive'],
+          right: ['procedural', 'system-loyal', 'efficient']
         }
       }
     },
 
     // ============================================================================
-    // EVENT 24: Systemkollaps
+    // MOHAMMED - Arbeid eller uførhet
     // ============================================================================
     {
-      id: 'nav_kap1_event24',
-      act: 3,
-      character: 'Systemet',
-      characterImage: '/placeholders/portrait-3.png',
-      text: 'Alt går galt samtidig. IT-systemet er nede igjen. Tre brukere ringer deg samtidig. Din leder krever en rapport innen i dag. Budsjettet er tomt. Du kan ikke hjelpe alle. Du må prioritere.',
-      leftChoice: 'Prioriter brukerne',
-      rightChoice: 'Prioriter ledelsens krav',
-      consequences: {
-        left: { klient: 15, tillit: 10, omdømme: -25, penger: -10 },
-        right: { omdømme: 15, penger: 5, klient: -25, tillit: -20 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['client-first', 'social-worker', 'courage'],
-          right: ['system-loyal', 'bureaucrat', 'resigned']
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 25: Mira - Tredje møte
-    // ============================================================================
-    {
-      id: 'nav_kap1_event25',
-      act: 3,
-      character: 'Mira, 31 år',
-      characterImage: '/placeholders/portrait-4.png',
-      text: 'Mira kommer tilbake. Datteren har fått tannregulering takket være din hjelp tidligere. "Tusen takk," sier hun. "Men nå trenger hun psykologhjelp også. Hun sliter fortsatt på skolen." Du kan enten hjelpe henne videre eller henvise henne til andre tjenester.',
-      leftChoice: 'Hjelp henne videre',
-      rightChoice: 'Henvise til andre tjenester',
-      consequences: {
-        left: { klient: 20, tillit: 15, penger: -20, omdømme: -15 },
-        right: { omdømme: 10, penger: 5, klient: -20, tillit: -15 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['client-first', 'social-worker', 'courage'],
-          right: ['system-loyal', 'procedural', 'bureaucrat']
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 26: Mohammed - Fjerde møte
-    // ============================================================================
-    {
-      id: 'nav_kap1_event26',
+      id: 'nav_mohammed_future',
       act: 3,
       character: 'Mohammed, 45 år',
       characterImage: '/placeholders/portrait-2.png',
-      text: 'Mohammed har jobbet i deltidsstilling i seks måneder. "Jeg klarer meg, men jeg trenger hjelp til å finne bedre lønn. Familien min sliter økonomisk." Du kan enten hjelpe ham med å søke på bedre stillinger eller henvise ham til standard jobbsøkerkurs.',
-      leftChoice: 'Hjelp aktivt med jobbsøking',
-      rightChoice: 'Henvise til standard kurs',
+      text: 'Mohammed har prøvd i et halvt år. Fysioterapeuten skriver at han kan jobbe 30%, kanskje 40% på gode dager. Legen anbefaler uføretrygd. Mohammed vil jobbe. "Familien min trenger at jeg jobber. Men kroppen min..."',
+      leftChoice: 'Støtt arbeidsforsøk videre',
+      rightChoice: 'Støtt uføresøknad',
       consequences: {
-        left: { klient: 15, tillit: 10, penger: -10, omdømme: -5 },
-        right: { omdømme: 10, penger: 5, klient: -15, tillit: -10 }
+        left: { klient: 15, tillit: 18, penger: -20, omdømme: -18 },
+        right: { omdømme: 15, penger: 15, klient: -15, tillit: -12 }
       },
       metadata: {
         choiceTags: {
-          left: ['client-first', 'social-worker', 'pragmatic'],
-          right: ['system-loyal', 'procedural', 'bureaucrat']
+          left: ['client-first', 'courage', 'social-worker'],
+          right: ['pragmatic', 'system-loyal', 'realistic']
         }
       }
     },
 
     // ============================================================================
-    // EVENT 27: Ledelsens siste krav
+    // MIRA - Siste desperate forsøk
     // ============================================================================
     {
-      id: 'nav_kap1_event27',
-      act: 3,
-      character: 'Din leder',
-      characterImage: '/placeholders/portrait-3.png',
-      text: 'Din leder kaller deg inn for siste gang. "Tallene dine er fortsatt ikke gode nok. Du må enten forbedre måloppnåelsen betydelig, eller vi må vurdere om du passer i rollen." Hun ser på deg. "Hva vil du gjøre?"',
-      leftChoice: 'Forsvar arbeidet ditt',
-      rightChoice: 'Aksepter kritikken',
-      consequences: {
-        left: { tillit: 15, omdømme: -20, klient: 5 },
-        right: { omdømme: 10, tillit: -15, klient: -5 }
-      },
-      metadata: {
-        choiceTags: {
-          left: ['courage', 'system-fighter', 'social-worker'],
-          right: ['resigned', 'system-loyal', 'bureaucrat']
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 28: Mira i desperasjon (siste valg før outro)
-    // ============================================================================
-    {
-      id: 'nav_kap1_event12',
+      id: 'nav_mira_desperate',
       act: 3,
       character: 'Mira, 31 år',
       characterImage: '/placeholders/portrait-4.png',
-      text: 'Mira kommer tilbake en siste gang. Datteren gråter på skolen. Hun blir mobbet for tennene sine. "Kan ikke barnet mitt få hjelp?" spør Mira. "Jeg forstår reglene, men... hun er bare et barn." Dette er siste valg før avslutning. Det mest følelsesmessig ladede.',
-      leftChoice: 'Finn en måte å hjelpe på',
-      rightChoice: 'Følg reglene - avslå',
+      text: 'Mira sitter stille. Datteren har droppet ut av skolen. Barnevernet er involvert. "De sier jeg ikke klarer å ivareta barna. Men jeg har ingen penger. Kan NAV hjelpe med noe? Hva som helst?"',
+      leftChoice: 'Finn alle mulige ordninger',
+      rightChoice: 'Forklar begrensningene',
       consequences: {
-        left: { klient: 25, tillit: 15, omdømme: -25, penger: -30 },
-        right: { omdømme: 15, penger: 10, klient: -30, tillit: -20 }
+        left: { klient: 25, tillit: 20, penger: -25, omdømme: -25 },
+        right: { omdømme: 18, penger: 12, klient: -30, tillit: -25 }
       },
       metadata: {
         choiceTags: {
-          left: ['rule-bender', 'client-first', 'social-worker', 'courage'],
-          right: ['rule-follower', 'system-loyal', 'bureaucrat', 'resigned']
+          left: ['client-first', 'courage', 'social-worker', 'desperate'],
+          right: ['system-loyal', 'resigned', 'realistic', 'burnout']
         }
       }
     },
 
     // ============================================================================
-    // EVENT 13: Outro - Variant A (UTBRENT: tillit < 15)
+    // LINDA - Utdanning eller sammenbrudd
     // ============================================================================
     {
-      id: 'nav_kap1_event13_variantA',
+      id: 'nav_linda_conclusion',
+      act: 3,
+      character: 'Linda, 38 år',
+      characterImage: '/placeholders/portrait-5.png',
+      text: 'Linda har enten fullført første år på fagbrev, eller hun har falt tilbake. Hun trenger støtte nå mer enn noensinne. Du har begrenset med tid og ressurser. Mange andre brukere venter.',
+      leftChoice: 'Prioriter Linda',
+      rightChoice: 'Fordel ressursene likt',
+      consequences: {
+        left: { klient: 20, tillit: 18, penger: -20, omdømme: -18 },
+        right: { omdømme: 18, penger: 15, klient: -18, tillit: -15 }
+      },
+      metadata: {
+        choiceTags: {
+          left: ['client-first', 'intensive', 'social-worker'],
+          right: ['fair', 'pragmatic', 'system-loyal']
+        }
+      }
+    },
+
+    // ============================================================================
+    // FINAL EVENT - Systemkollaps
+    // ============================================================================
+    {
+      id: 'nav_system_collapse',
       type: 'narrative',
+      act: 3,
+      character: 'Systemkollaps',
+      characterImage: '/placeholders/portrait-3.png',
+      text: 'IT-systemet er nede. Tre brukere venter i resepsjonen. Lederen din krever rapport innen i dag. Budsjettet er tomt. Du har 47 ubesvarte e-poster. Du kan ikke hjelpe alle. Du kan knapt hjelpe noen. Systemet fungerer ikke.'
+    },
+
+    // ============================================================================
+    // ENDINGS (Conditional based on resources)
+    // ============================================================================
+    {
+      id: 'nav_ending_burnout',
+      type: 'narrative',
+      act: 3,
       character: 'Utbrenthet',
       characterImage: '/placeholders/portrait-1.png',
-      text: 'Du våkner ikke til vekkerklokka. Kroppen bare vil ikke. Det har bygget seg opp i måneder: søvnløse netter, gråt i bilen etter jobb, angst for å åpne e-posten. Du ringer legen. "Jeg klarer ikke mer." Hun skriver deg syk i seks måneder. Ironisk nok går du til NAV nå - på andre siden av skranken.',
+      text: 'Du våkner ikke til vekkerklokka. Kroppen bare vil ikke. Seks måneder med umulige valg. Søvnløse netter. Ansiktet til Kristian, Mohammed, Mira, Linda. Du ringer legen. "Jeg klarer ikke mer." Hun skriver deg syk. Ironisk nok går du til NAV nå - på andre siden av skranken.',
       metadata: {
         conditions: {
           resources: {
-            tillit: { max: 15 }
+            tillit: { max: 20 }
           }
         }
       }
     },
 
-    // ============================================================================
-    // EVENT 13: Outro - Variant B (SPARKET: omdømme < 15)
-    // ============================================================================
     {
-      id: 'nav_kap1_event13_variantB',
+      id: 'nav_ending_fired',
       type: 'narrative',
-      character: 'Avskjed',
+      act: 3,
+      character: 'Oppsigelse',
       characterImage: '/placeholders/portrait-3.png',
-      text: 'Lederen din kaller deg inn. "Vi har fulgt utviklingen. Du har brukt for mye av budsjettet. Måloppnåelsen er for lav. Du har gitt ytelser mot regelverket. Vi har dessverre ikke tillit til at du kan fortsette i rollen." Du pakker sakene dine. Du hjalp menneskene. Men systemet vant.',
+      text: 'Lederen din kaller deg inn. På bordet ligger rapporter. Budsjettsprekk. Regelbrudd. Lav måloppnåelse. "Vi har ikke tillit til at du kan fortsette i rollen." Du pakker sakene dine. Du hjalp menneskene. Men systemet vant.',
       metadata: {
         conditions: {
           resources: {
-            omdømme: { max: 15 }
+            omdømme: { max: 20 }
           }
         }
       }
     },
 
-    // ============================================================================
-    // EVENT 13: Outro - Variant C (KNEBLET: penger < 10 && omdømme < 30)
-    // ============================================================================
     {
-      id: 'nav_kap1_event13_variantC',
+      id: 'nav_ending_resignation',
       type: 'narrative',
-      character: 'Knebling',
-      characterImage: '/placeholders/portrait-3.png',
-      text: 'E-post fra ledelsen: "Med umiddelbar virkning innføres pre-godkjenning av alle tiltak. Du kan ikke lenger innvilge AAP, kvalifiseringsstønad eller tiltakspenger uten godkjenning fra leder." Du har blitt en stempeljomfru. Men ikke en hjelper. Du kan fortsatt være i systemet, men du kan ikke lenger hjelpe.',
-      metadata: {
-        conditions: {
-          resources: {
-            penger: { max: 10 },
-            omdømme: { max: 30 }
-          }
-        }
-      }
-    },
-
-    // ============================================================================
-    // EVENT 13: Outro - Variant D (ERKJENNELSE: alle ressurser > 20)
-    // ============================================================================
-    {
-      id: 'nav_kap1_event13_variantD',
-      type: 'narrative',
-      character: 'Erkjennelse',
+      act: 3,
+      character: 'Resignasjon',
       characterImage: '/placeholders/portrait-1.png',
-      text: 'Etter ett år på jobb sitter du med en kaffe og tenker: Dette systemet er skadet. Ikke fordi folk er onde. Ikke fordi brukerne er krevende. Men fordi NAV prøver å være to ting på en gang: Portvokter og hjelper. Dommer og alliert. Hver dag må du velge mellom mennesket og systemet. Mellom faglig skjønn og målstyring. Mellom Kristian, Mohammed, Mira, Linda - og reglene som ikke passer noen av dem. Kanskje... må NAV bli to ting?',
+      text: 'Du sitter med kaffe og tenker. Seks måneder. Noen fikk hjelp. Mange ikke. Ikke fordi du ikke prøvde. Ikke fordi du ikke brydde deg. Men fordi systemet har for mange regler, for lite tid, for stramt budsjett. Du er fortsatt her. Men du er ikke lenger sikker på hvorfor.',
+      metadata: {
+        conditions: {
+          resources: {
+            klient: { max: 25 }
+          }
+        }
+      }
+    },
+
+    {
+      id: 'nav_ending_understanding',
+      type: 'narrative',
+      act: 3,
+      character: 'Forståelse',
+      characterImage: '/placeholders/portrait-1.png',
+      text: 'Seks måneder som NAV-saksbehandler. Du har lært at små privilegier betyr mye. At regelverket ikke passer alle. At budsjettet begrenser hjelpen. At måloppnåelse og mennesker ikke alltid går sammen. Du tenker: Kanskje problemet ikke er menneskene. Kanskje problemet er systemet. Kanskje... må NAV bli noe annet.',
       metadata: {
         conditions: {
           resources: {
